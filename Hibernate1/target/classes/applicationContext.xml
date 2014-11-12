@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+ 
+	<tx:annotation-driven />
+
+	<bean id="ds_oracle"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:nfl" />
+		<property name="username" value="nfl" />
+		<property name="password" value="nfl" />
+	</bean>
+
+	<bean id="ds_postgres"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgres:@localhost:5432/postgres" />
+		<property name="username" value="postgres" />
+		<property name="password" value="postgres" />
+	</bean>
+
+	<!-- Configures the location of static resources such as css files. Requires 
+		Spring Framework 3.0 or higher. -->
+	<mvc:resources mapping="/static/**" location="/static/" />
+
+	<!-- Ensures that dispatcher servlet can be mapped to '/' and static resources 
+		are still served by the containers default servlet. Requires Spring Framework 
+		3.0 or higher. -->
+	<mvc:default-servlet-handler />
+
+	
+</beans>
