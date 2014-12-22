@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.kyron.soap</groupId>
+	<artifactId>Jaxb1</artifactId>
+	<version>1.0</version>
+	<name>TestJaxb</name>
+	<build>
+		<plugins>
+			<!-- Generate JAXB Java source files from an XSD file -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<packageName>com.kyron.jaxb</packageName>
+					<outputDirectory>src/main/java</outputDirectory>
+					<!-- if you don't want to use default path src/main/xsd
+						<schemaDirectory>${basedir}/src/main/resources</schemaDirectory> -->
+					
+					<includeSchema>**/*.xsd</includeSchema>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
