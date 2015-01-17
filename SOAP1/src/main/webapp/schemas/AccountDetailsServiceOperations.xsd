@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="generated_sources/myweb/accountservice"
+	xmlns:account="generated_sources/myweb" targetNamespace="generated_sources/myweb/accountservice"
+	elementFormDefault="qualified">
+	<xsd:import namespace="generated_sources/myweb"
+		schemaLocation="AccountDetails.xsd" />
+	<xsd:element name="AccountDetailsRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="accountNumber" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="AccountDetailsResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="AccountDetails" type="account:Account" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,24 @@
+SOAP1 (SoapTest)
+TODO:
+- Systematically change the project to be mine.
+Detail steps:
+- change schemas "targetNamespace", see if it still processes requests
+- remove web-inf/config/test.xml, see if it still processes requests
+
+- update SOAP project with new schemas, see if it still generate source (in /java dir?)
+- create parent project SOAP2 = SOAP + SOAP1 where SOAP1 only contains /service. use <module> to compile SOAP to generate source first.
+
+- check in GIT
+
+12/25/2014 Christmas day
+"targetNamespace" and everything in schemas (xsd) serve 2 purposes:
+1. Organize where the generated sources will be in project directory
+2. Used in AccountServiceEndpoint.java where you define @PayloadRoot for the request
+Note: 
+- If pom.xml define jaxb build to generate source, then endpoint service (java) compiles fine. What if it is in another project? = TODO.
+- If change the package name of the endpoint (java), you need to change the spring-context.xml component-scan-package.
+TODO:
+- Change web-service to 3.0 from 2.0 in spring-context.xml?
+- Change web-app_2_5.xsd to 3.0 in web.xml?
+Do the above make any differences?
+
