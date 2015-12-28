@@ -1,0 +1,6 @@
+12/23/2015
+Example from https://spring.io/guides/gs/accessing-data-neo4j/
+
+- Main class implements CommandLineRunner (not a web app)
+- Base package is com.kyron, Spring component scan starts here.
+- Always create new database (? how to use a current one ?)
