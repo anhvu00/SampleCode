@@ -1,0 +1,5 @@
+com\kyron\MainApp$Runner.class
+com\kyron\AppConfig.class
+com\kyron\domain\Person.class
+com\kyron\repository\PersonRepository.class
+com\kyron\MainApp.class

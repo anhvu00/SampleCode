@@ -1,0 +1,14 @@
+7/27/16
+MySpringNeo_303b
+Springboot + OGM 2 + http driver
+
+Quick start:
+- Run neo4j v3.0.3 server
+- Create a blank database
+- Download, build, run MainApp
+
+Notes:
+See pom.xml for libraries and their versions
+Database login is in /resources/ogm.properties. It's easier than before.
+MainApp: the main engine is the @Component implements CommandLineRunner interface
+Person: need @NodeEntity(label="PERSON") or it will use the class name ("Person") as label.
