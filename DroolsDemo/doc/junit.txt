@@ -1,0 +1,8 @@
+Anh notes:
+This project somehow declares to use JUnit 5 (org.junit.jupiter.api)
+but it actually uses JUnit 4 (org.junit.Test).
+So, you cannot run individual test file by right-click | run as JUnit test ("no test found for test runner JUnit 5")
+
+To fix it, you must change all org.junit.Test to org.junit.jupiter
+OR
+somehow tell eclipse to use JUnit 4 (project properties | java build path | libraries | add library | select JUnit 4)

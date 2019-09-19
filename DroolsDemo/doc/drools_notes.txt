@@ -1,0 +1,17 @@
+9/18/19
+KIE = Knowledge Is Everything. Created by JBOSS
+https://docs.jboss.org/drools/release/6.2.0.CR3/drools-docs/html/KIEChapter.html
+Uberfire = the base Work Bench (WB) similar to Eclipse IDE providing plug-ins, a console tool.
+Guvnor (version 6+) is under Uberfire.
+WBs = Drools-WB, KIE-WB. Each consists of different components and purposes.
+
+Life cycles:
+1. Author: Authoring of knowledge using a UI metaphor, such as: DRL, BPMN2, decision table, class models
+2. Build: Builds the authored knowledge into deployable units. (ex. KIE creates JAR files)
+3. Deploy: KIE uses Maven style repository
+4. Utilize: by 2 different ways
+- Application loads JAR to KieSession
+- KIE exposes the JAR at runtime via a KieContainer which creates KieSessions.
+5. Run: Systems interact with the KieSession, via API.
+
+Code sample on Github (last updated 2014, not very useful): https://github.com/kiegroup/drools/tree/6.0.x/drools-examples-api
