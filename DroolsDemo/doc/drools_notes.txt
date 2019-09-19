@@ -15,3 +15,23 @@ Life cycles:
 5. Run: Systems interact with the KieSession, via API.
 
 Code sample on Github (last updated 2014, not very useful): https://github.com/kiegroup/drools/tree/6.0.x/drools-examples-api
+The better examples come with the Drools-Engine download distribution zip file (sudoku, petstore, pong, etc)
+Explanation available on jboss.org web site (https://docs.jboss.org/drools/release/5.2.0.Final/drools-expert-docs/html/ch09.html)
+
+KIE-WB is a web gui (localhost) allow user to create project, author rules via gui form, build, deploy to Rule Server
+Then use Postman to send request with parameters to the Rule Server and get result.
+The good things about this are:
+- Allow user upload rules from Excel templates 
+- Translate the xls to Drools rules (i.e. myrules.drl) [the 'build' process will detect any errors in the rules]
+- Rest API
+The not-so-good things are:
+- Versions management b/c it uses Maven repo (group, artifact, version). 
+The user must be careful which version + which rule sets are running in the Rule Server (System Admin skill)
+- Configure Postman (header, credential, kie header/body, json response) is not trivial
+
+youTube link = https://www.youtube.com/watch?v=7_qqNI2LvKw
+
+Backward Chaining (ex. Great Wall is on Earth, key is in office) uses recursive to either trace item or list all items (in house)
+The result is usable but too much effort + not very useful.
+Graph database such as Neo4J can show better visual + easier (using graph query), less effort.
+
