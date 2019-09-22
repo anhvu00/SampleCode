@@ -35,3 +35,5 @@ Backward Chaining (ex. Great Wall is on Earth, key is in office) uses recursive 
 The result is usable but too much effort + not very useful.
 Graph database such as Neo4J can show better visual + easier (using graph query), less effort.
 
+* hard to learn rule - install eclipse rule workbench
+http://download.eclipse.org/tools/gef/updates/releases/

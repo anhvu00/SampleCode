@@ -67,7 +67,8 @@ public class DroolsBeanFactory {
 
         kieFileSystem.write(ResourceFactory.newClassPathResource("com/kyron/drools/rules/BackwardChaining.drl"));
         kieFileSystem.write(ResourceFactory.newClassPathResource("com/kyron/drools/rules/Hello.drl"));
-//        kieFileSystem.write(ResourceFactory.newClassPathResource("com/kyron/drools/rules/SuggestApplicant.drl"));
+        kieFileSystem.write(ResourceFactory.newClassPathResource("com/kyron/drools/rules/Match.drl"));
+        //        kieFileSystem.write(ResourceFactory.newClassPathResource("com/kyron/drools/rules/SuggestApplicant.drl"));
 //        kieFileSystem.write(ResourceFactory.newClassPathResource("com/kyron/drools/rules/Product_rules.xls"));
         
         

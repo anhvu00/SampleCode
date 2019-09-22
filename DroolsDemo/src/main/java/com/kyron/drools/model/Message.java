@@ -3,6 +3,8 @@ package com.kyron.drools.model;
 public class Message {
 	public static final int HELLO = 0;
 	public static final int GOODBYE = 1;
+	private String message;
+	private int status;
 	
 	public String getMessage() {
 		return message;
@@ -22,6 +24,5 @@ public class Message {
 	public static int getGoodbye() {
 		return GOODBYE;
 	}
-	private String message;
-	private int status;
+
 }

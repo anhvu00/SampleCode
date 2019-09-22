@@ -1,0 +1,17 @@
+import com.kyron.drools.model.Team;
+import com.kyron.drools.model.Matchup;
+
+rule "Home Team"
+  when
+    $t : Team(homeTeam == true, $team : name) 
+  then
+      System.out.println($team + " at Home" ); 
+end
+rule "Same Division"
+dialect "mvel"
+  when
+	$m : Matchup($h : home, $v :visitor,$h.division == $v.division)
+	
+  then
+     System.out.println($h.name + " and  " + $v.name  + " same division" ); 
+end

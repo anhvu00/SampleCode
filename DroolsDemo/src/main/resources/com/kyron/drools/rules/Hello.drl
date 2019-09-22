@@ -1,11 +1,16 @@
 import com.kyron.drools.model.Message;
+
+/**
+* status = 0 or 1
+* The rule modifies the Message's status and triggers all rules again (i.e. chain)
+*/
 rule "Hello World"
       dialect "mvel"
   when
-      m : Message( status == Message.HELLO, message : message )
+      $m : Message( status == Message.HELLO, message : message )
   then
       System.out.println( message ); 
-      modify ( m ) { message = "Goodbye cruel world",
+      modify ( $m ) { message = "Goodbye cruel world",
                      status = Message.GOODBYE };
 end
 rule "Goodbye World"
