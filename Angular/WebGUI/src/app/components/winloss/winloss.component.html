@@ -1,0 +1,30 @@
+<div class="container">
+  <h2>User Win/Loss Table</h2>
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>Selection</th>
+        <th>Line</th>
+        <th>Amount</th>
+        <th>Outcome</th>
+        <th>Win/Loss</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of winlossList">
+        <td>{{item.selection}}</td>
+        <td>{{item.line}}</td>
+        <td>{{item.amount}}</td>
+        <td>{{item.score}}</td>
+        <td>{{item.winloss}}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total</td>
+        <td>-110</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

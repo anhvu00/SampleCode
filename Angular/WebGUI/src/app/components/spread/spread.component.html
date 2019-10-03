@@ -1,0 +1,34 @@
+<div class="container">
+    <h2>Weekly Spread Table</h2>
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Matchup</th>
+                <th>Side</th>
+                <th>O/U</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of spreadList">
+                <td>{{item.gameDateTime | date:'EEEE M/d/yy h:mm a'}}</td>
+                <td>
+                    <p>{{item.visitor}}</p>
+                    <p>{{item.home}}</p>
+
+                </td>
+                <td>
+                    <p>filler</p>
+                    <p><input type="text" name="gameSpread" value={{item.lineSide}}></p>
+                </td>
+                <td>
+                    <p>filler</p>
+                    <p><input type="text" name="ouSpread" value={{item.lineOU}}></p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</div>

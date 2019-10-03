@@ -1,0 +1,28 @@
+<main class="page bg-white" id="petratings">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 bg-white">
+
+        <div class="container">
+          <app-pick
+            [spreadList]="spreadList">
+          </app-pick>
+          <app-spread 
+            [spreadList]="spreadList">
+          </app-spread>
+          <app-winloss
+            [winlossList]="winlossList">
+          </app-winloss>
+          <app-add 
+            (addEvt)="addApt($event)">
+          </app-add>
+          <!-- bind ary aptList to theList, delete event -->
+          <app-list 
+            [aptList]="theList" 
+            (deleteEvt)="deleteApt($event)">
+          </app-list>
+        </div>
+      </div><!-- col-md-12 -->
+    </div><!-- row -->
+  </div><!-- container -->
+</main><!-- main -->

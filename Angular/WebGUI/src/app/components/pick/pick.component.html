@@ -1,0 +1,69 @@
+<div class="container">
+  <h2>User Pick Table</h2>
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Matchup</th>
+        <th>Side</th>
+        <th>O/U</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of spreadList">
+        <td>{{item.gameDateTime | date:'EEEE M/d/yy h:mm a'}}</td>
+        <td>
+          <p>{{item.visitor}}</p>
+          <p>{{item.home}}</p>
+
+        </td>
+        <td>
+          <button type="submit" class="btn btn-primary d-block">{{item.lineSide}}</button>
+          <button type="submit" class="btn btn-primary d-block">{{item.lineSide}}</button>
+        </td>
+        <td>
+          <button type="submit" class="btn btn-primary d-block">O {{item.lineOU}}</button>
+          <button type="submit" class="btn btn-primary d-block">U {{item.lineOU}}</button>
+        </td>
+      </tr>
+    </tbody>
+  </table> <!-- pick -->
+
+  <h2>Bet Card Table</h2>
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>Selection</th>
+        <th>Line</th>
+        <th>Amount</th>
+        <th>(cancel)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>SEA</td>
+        <td>-2.0</td>
+        <td>
+          <input type="text" name="betAmt" value="100">
+        </td>
+        <td>
+          <button type="submit" class="btn btn-primary d-block">Delete</button>
+        </td>
+      </tr>
+      <tr>
+        <td>Over TB/NO</td>
+        <td>47.5</td>
+        <td>
+          <input type="text" name="betAmt" value="200">
+        </td>
+        <td>
+          <button type="submit" class="btn btn-primary d-block">Delete</button>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+  <div>
+    <button type="submit" class="btn btn-primary d-block">Send</button>
+    <button type="submit" class="btn btn-primary d-block">Clear</button>
+  </div>
