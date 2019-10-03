@@ -1,3 +1,10 @@
+# TODO
+
+- Add pick section
+- Add submit picks section
+- Add user report section (parent child?)
+- Download local bootstrap.min.js
+- Save to file
 # Angularinterface
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.0.

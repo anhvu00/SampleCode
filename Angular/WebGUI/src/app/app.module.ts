@@ -9,17 +9,19 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app-component/app.component';
 import { AddComponent } from './components/add/add.component';
-import { SearchComponent } from './components/search/search.component';
 import { ListComponent } from './components/list/list.component';
 import { SpreadComponent } from './components/spread/spread.component';
+import { PickComponent } from './components/pick/pick.component';
+import { WinlossComponent } from './components/winloss/winloss.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AddComponent,
-    SearchComponent,
     ListComponent,
-    SpreadComponent
+    SpreadComponent,
+    PickComponent,
+    WinlossComponent
   ],
   imports: [BrowserModule, HttpClientModule, FontAwesomeModule, FormsModule],
   providers: [],
