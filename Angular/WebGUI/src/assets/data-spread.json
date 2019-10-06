@@ -1,26 +1,29 @@
 [
-    {
-      "week": "5",
-      "gameDateTime": "2019-10-5 20:15",
-      "visitor": "LAR",
-      "home": "SEA",
-      "lineSide": "-2.0",
-      "lineOU": "49.0"
-    },
-    {
-        "week": "5",
-        "gameDateTime": "2019-10-9 13:00",
-        "visitor": "TB",
-        "home": "NO",
-        "lineSide": "-3.0",
-        "lineOU": "47.5"
-      },
-      {
-        "week": "5",
-        "gameDateTime": "2019-10-9 13:00",
-        "visitor": "NE",
-        "home": "WAS",
-        "lineSide": "15.0",
-        "lineOU": "46.5"
-      }
+  {
+    "week": "5",
+    "gameDateTime": "2019-10-3 20:15",
+    "visitor": "LAR",
+    "home": "SEA",
+    "visitorLine": "2.0",
+    "homeLine": "-2.0",
+    "OULine": "49.5"
+  },
+  {
+    "week": "5",
+    "gameDateTime": "2019-10-9 13:00",
+    "visitor": "TB",
+    "home": "NO",
+    "visitorLine": "3.0",
+    "homeLine": "-3.0",
+    "OULine": "47.5"
+  },
+  {
+    "week": "5",
+    "gameDateTime": "2019-10-9 13:00",
+    "visitor": "NE",
+    "home": "WAS",
+    "visitorLine": "-15.0",
+    "homeLine": "15.0",
+    "OULine": "46.5"
+  }
 ]

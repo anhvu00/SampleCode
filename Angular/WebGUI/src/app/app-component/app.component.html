@@ -8,7 +8,8 @@
             [spreadList]="spreadList">
           </app-pick>
           <app-spread 
-            [spreadList]="spreadList">
+            [spreadList]="spreadList"
+            (editSpreadEvt)="editSpreadEvt($event)">
           </app-spread>
           <app-winloss
             [winlossList]="winlossList">

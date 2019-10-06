@@ -36,6 +36,14 @@ export class AppComponent implements OnInit {
     this.theList = without(this.theList, anApt);
   }
 
+  // handle edited spread
+  editSpreadEvt( spread: object[] ) {
+    // TODO: update the visitor spread = homespread * (-1)
+    this.spreadList = spread.splice(0);
+    console.log("new spread is");
+    console.log(this.spreadList);
+  }
+
   // declare type (best practice)
   constructor(private http: HttpClient) {
   }

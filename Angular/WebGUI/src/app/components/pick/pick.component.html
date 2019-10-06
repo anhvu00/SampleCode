@@ -10,7 +10,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of spreadList">
+      <tr *ngFor="let item of spreadList; let id=index">
         <td>{{item.gameDateTime | date:'EEEE M/d/yy h:mm a'}}</td>
         <td>
           <p>{{item.visitor}}</p>
@@ -18,12 +18,14 @@
 
         </td>
         <td>
-          <button type="submit" class="btn btn-primary d-block">{{item.lineSide}}</button>
-          <button type="submit" class="btn btn-primary d-block">{{item.lineSide}}</button>
+          <button type="submit" class="btn btn-primary d-block"
+          (click)="pickVisitor(item)">{{item.visitorLine}}</button>
+          <button type="submit" class="btn btn-primary d-block"
+          (click)="pickHome(item)">{{item.homeLine}}</button>
         </td>
         <td>
-          <button type="submit" class="btn btn-primary d-block">O {{item.lineOU}}</button>
-          <button type="submit" class="btn btn-primary d-block">U {{item.lineOU}}</button>
+          <button type="submit" class="btn btn-primary d-block">O {{item.OULine}}</button>
+          <button type="submit" class="btn btn-primary d-block">U {{item.OULine}}</button>
         </td>
       </tr>
     </tbody>

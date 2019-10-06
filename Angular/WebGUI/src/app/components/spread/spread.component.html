@@ -8,7 +8,7 @@
                 <tr>
                     <th>Time</th>
                     <th>Matchup</th>
-                    <th>Side</th>
+                    <th>Line</th>
                     <th>O/U</th>
                 </tr>
             </thead>
@@ -21,12 +21,12 @@
 
                     </td>
                     <td>
-                        <p>filler</p>
-                        <span contenteditable="true" style="background:blue" (keyup)="changeValue(id, 'lineSide', $event)" (blur)="updateList(id, 'lineSide', $event)">{{item.lineSide}}</span>
+                        <p>{{item.visitorLine}}</p>
+                        <span contenteditable="true" style="background:blue"  (blur)="updateList(id, 'homeLine', $event)">{{item.homeLine}}</span>
                     </td>
                     <td>
-                        <p>filler</p>
-                        <span contenteditable="true" style="background:blue" (keyup)="changeValue(id, 'lineOU', $event)" (blur)="updateList(id, 'lineOU', $event)">{{item.lineOU}}</span>
+                        <p>---</p>
+                        <span contenteditable="true" style="background:blue"  (blur)="updateList(id, 'OULine', $event)">{{item.OULine}}</span>
                     </td>
                 </tr>
             </tbody>
