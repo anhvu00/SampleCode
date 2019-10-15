@@ -9,7 +9,8 @@ class App extends Component {
     super();
     this.state = {
       myAppointments: [],
-      mySpreads: []
+      mySpreads: [],
+      lastIndex: 0
     };
   }
 
@@ -28,6 +29,9 @@ class App extends Component {
       .then(response => response.json())
       .then(result => {
         const tempAry = result.map(item => {
+          item.gameId = this.state.lastIndex;
+          // increment artificial index
+          this.setState({lastIndex: this.state.lastIndex + 1})
           return item;
         });
         this.setState({

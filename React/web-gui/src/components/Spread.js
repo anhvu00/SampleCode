@@ -18,7 +18,7 @@ class Spread extends Component {
         return (
             <div className="weekly-spread">
                 <h2>Weekly Spread Table</h2>
-                <table class="table table-dark table-hover">
+                <table className="table table-dark table-hover">
                     <thead>
                         <tr>
                             <th>Time</th>
@@ -29,25 +29,25 @@ class Spread extends Component {
                     </thead>
                     <tbody>
                         {this.props.spreads.map(item => (
-                        <tr>
-                            <td> {item.gameDateTime} </td>
+                        <tr key={item.gameId}>
+                            <td> {item.gameId}--{item.gameDateTime} </td>
                             <td>
                                 <p>{item.visitor}</p>
                                 <p>{item.home}</p>
                             </td>
                             <td>
                                 <p>{item.visitorLine}</p>
-                                <span contenteditable="true" >{item.homeLine}</span>
+                                <span contentEditable="true" >{item.homeLine}</span>
                             </td>
                             <td>
                                 <p>---</p>
-                                <span contenteditable="true" >{item.OULine}</span>
+                                <span contentEditable="true" >{item.OULine}</span>
                             </td>
                         </tr>
                         ))}
                     </tbody>
                 </table>
-                <div class="form-group">
+                <div className="form-group">
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </div >
