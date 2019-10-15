@@ -1,0 +1,16 @@
+[
+    {
+        "selection": "SEA",
+        "line": "+3.5",
+        "amount": "100",
+        "score": "LAR 20 - SEA 17",
+        "winloss": "100"
+    },
+    {
+        "selection": "over LAR/SEA",
+        "line": "47.5",
+        "amount": "200",
+        "score": "LAR 20 - SEA 17",
+        "winloss": "-210"
+    }
+]
