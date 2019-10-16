@@ -1,5 +1,6 @@
 [
     {
+        "pickId": "1",
         "selection": "SEA",
         "line": "+3.5",
         "amount": "100",
@@ -7,6 +8,7 @@
         "winloss": "100"
     },
     {
+        "pickId": "2",
         "selection": "over LAR/SEA",
         "line": "47.5",
         "amount": "200",

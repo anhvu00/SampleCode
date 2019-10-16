@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FaTimes } from 'react-icons/fa';
+//import { FaTimes } from 'react-icons/fa';
 import Moment from 'react-moment';
 
 class Spread extends Component {
@@ -29,26 +29,29 @@ class Spread extends Component {
                     </thead>
                     <tbody>
                         {this.props.spreads.map(item => (
-                        <tr key={item.gameId}>
-                            <td> {item.gameId}--{item.gameDateTime} </td>
-                            <td>
-                                <p>{item.visitor}</p>
-                                <p>{item.home}</p>
-                            </td>
-                            <td>
-                                <p>{item.visitorLine}</p>
-                                <span contentEditable="true" >{item.homeLine}</span>
-                            </td>
-                            <td>
-                                <p>---</p>
-                                <span contentEditable="true" >{item.OULine}</span>
-                            </td>
-                        </tr>
+                            <tr key={item.gameId}>
+                                <td> <Moment date={item.gameDateTime}
+                                    parse="YYYY-MM-DD hh:mm"
+                                    format="dddd, YYYY/MM/DD h:mma"></Moment>
+                                </td>
+                                <td>
+                                    <p>{item.visitor}</p>
+                                    <p>{item.home}</p>
+                                </td>
+                                <td>
+                                    <p>{item.visitorLine}</p>
+                                    <span contentEditable="true" >{item.homeLine}</span>
+                                </td>
+                                <td>
+                                    <p>---</p>
+                                    <span contentEditable="true" >{item.OULine}</span>
+                                </td>
+                            </tr>
                         ))}
                     </tbody>
                 </table>
                 <div className="form-group">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" className="btn btn-primary">Save</button>
                 </div>
             </div >
         );

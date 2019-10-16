@@ -1,5 +1,6 @@
 [
   {
+    "gameId": "1",
     "week": "5",
     "gameDateTime": "2019-10-3 20:15",
     "visitor": "LAR",
@@ -9,8 +10,9 @@
     "OULine": "49.5"
   },
   {
+    "gameId": "2",
     "week": "5",
-    "gameDateTime": "2019-10-9 13:00",
+    "gameDateTime": "2019-10-6 13:00",
     "visitor": "TB",
     "home": "NO",
     "visitorLine": "3.0",
@@ -18,8 +20,9 @@
     "OULine": "47.5"
   },
   {
+    "gameId": "3",
     "week": "5",
-    "gameDateTime": "2019-10-9 13:00",
+    "gameDateTime": "2019-10-6 13:00",
     "visitor": "NE",
     "home": "WAS",
     "visitorLine": "-15.0",
