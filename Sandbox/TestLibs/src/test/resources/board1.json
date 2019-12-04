@@ -1,0 +1,193 @@
+{
+    "links": [],
+    "authorsNodes": [
+        {
+            "selected": false,
+            "id": "1566402694880-0.8528212109318292",
+            "x": 58,
+            "y": 349,
+            "data": [
+                {
+                    "id": "25073877",
+                    "handle": "realDonaldTrump",
+                    "name": "Donald J. Trump",
+                    "urls": [
+                        "https://twitter.com/realDonaldTrump"
+                    ],
+                    "followersCount": -1,
+                    "followingCount": -1,
+                    "source": "Twitter",
+                    "profilePicUrl": "https://pbs.twimg.com/profile_images/874276197357596672/kUuht00m_bigger.jpg"
+                }
+            ],
+            "notes": ""
+        },
+        {
+            "selected": false,
+            "id": "1566403082716-0.12536082648970948",
+            "x": 136,
+            "y": 348,
+            "data": [
+                {
+                    "id": "52544275",
+                    "handle": "IvankaTrump",
+                    "name": "Ivanka Trump",
+                    "urls": [
+                        "https://twitter.com/IvankaTrump"
+                    ],
+                    "followersCount": -1,
+                    "followingCount": -1,
+                    "source": "Twitter",
+                    "profilePicUrl": "https://pbs.twimg.com/profile_images/1054179226100908032/i5ZXfFdE_bigger.jpg"
+                }
+            ],
+            "notes": ""
+        }
+    ],
+    "conversationNodes": [],
+    "notesNodes": [
+        {
+            "selected": false,
+            "id": "1566402360566-0.3342170748721818",
+            "x": 211,
+            "y": 58,
+            "data": {
+                "selected": false,
+                "id": "1566402357397-0.3134056989678593",
+                "x": 93,
+                "y": 257,
+                "data": null,
+                "notes": null
+            },
+            "notes": ""
+        },
+        {
+            "selected": false,
+            "id": "1566402360566-0.2146340420459225",
+            "x": 21,
+            "y": 61,
+            "data": {
+                "selected": false,
+                "id": "1566401997587-0.7634646793260067",
+                "x": 40,
+                "y": 47,
+                "data": {
+                    "selected": false,
+                    "id": "1566401120482-0.2828498511013606",
+                    "x": 128,
+                    "y": 271,
+                    "data": null,
+                    "notes": null
+                },
+                "notes": ""
+            },
+            "notes": ""
+        },
+        {
+            "selected": false,
+            "id": "1566402360566-0.9615985973106371",
+            "x": 111,
+            "y": 59,
+            "data": {
+                "selected": false,
+                "id": "1566401997587-0.2548991333221138",
+                "x": 137,
+                "y": 173,
+                "data": {
+                    "selected": false,
+                    "id": "1566400771554-0.6332588320795505",
+                    "x": 172,
+                    "y": 197,
+                    "data": null,
+                    "notes": ""
+                },
+                "notes": ""
+            },
+            "notes": ""
+        }
+    ],
+    "imagesNodes": [
+        {
+            "selected": false,
+            "id": "1566402603722-0.9042102367084823",
+            "x": 33,
+            "y": 129,
+            "data": "data:image/png;base64,AAAQIECBAgQIAAAQIECBAgQIBA0wgIEJumK90IAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAgfoFBIj1GyqBAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAQNMI/H+L7sa0tNhyjgAAAABJRU5ErkJggg==",
+            "notes": ""
+        },
+        {
+            "selected": false,
+            "id": "1566403023159-0.8126588144857385",
+            "x": 117,
+            "y": 129,
+            "data": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA5YAAAMxPHhY13nMMSKuh/RLb3p6y8X/+1Ynm2/GIiQASIABEgAkSACBABIkAEiEBCIUBimVDdwcYQASJABIgAESACRIAIEAEiQASSDwESy+TrM7aYCBABIkAEiAARIAJEgAgQASKQUAiQWCZUd7AxRIAIEAEiQASIABEgAkSACBCB5EPg/5kZmKGXsKIKAAAAAElFTkSuQmCC",
+            "notes": ""
+        }
+    ],
+    "placesNodes": [
+        {
+            "selected": false,
+            "id": "1566402645335-0.40715929442722065",
+            "x": 59,
+            "y": 225,
+            "data": {
+                "name": "dc",
+                "address": "capital",
+                "coordinates": {
+                    "latitude": 38.82600125957964,
+                    "longitude": -77.03827857971193
+                }
+            },
+            "notes": "captial location"
+        },
+        {
+            "selected": false,
+            "id": "1566403068352-0.8808812336196832",
+            "x": 139,
+            "y": 224,
+            "data": {
+                "name": "ny",
+                "address": "new york city",
+                "coordinates": {
+                    "latitude": 40.70074783237384,
+                    "longitude": -74.05016899108888
+                }
+            },
+            "notes": "empire state bldg"
+        }
+    ],
+    "recordNodes": [
+        {
+            "selected": false,
+            "id": "1566402672583-0.49105503226414515",
+            "x": 60,
+            "y": 290,
+            "data": [
+                {
+                    "url": "https://store.redskins.com/",
+                    "title": "Redskins Team Store",
+                    "rawData": "Unable to make request for: https://store.redskins.com/ - Response status code: 403",
+                    "attributes": {},
+                    "timestamp": "2019-08-21T15:51:06.110+0000"
+                }
+            ],
+            "notes": ""
+        },
+        {
+            "selected": false,
+            "id": "1566403108546-0.6167940629043962",
+            "x": 142,
+            "y": 286,
+            "data": [
+                {
+                    "url": "https://www.foxsports.com/nfl/san-francisco-49ers-team",
+                    "title": "San Francisco 49ers News, Schedule, Scores, Stats, Roster ...",
+                    "rawData": "Unable to make request for: https://www.foxsports.com/nfl/san-francisco-49ers-team - Response status code: 403",
+                    "attributes": {},
+                    "timestamp": "2019-08-21T15:58:23.244+0000"
+                }
+            ],
+            "notes": ""
+        }
+    ]
+}

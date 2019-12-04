@@ -1,0 +1,26 @@
+{
+  "id": "a885ef5c-0df6-44aa-aafd-eba71d0590f7",
+  "name": "My Test Board",
+  "data": {
+    "links": [],
+    "authorNodes": [],
+    "conversationNodes": [],
+    "notesNodes": [{
+      "selected": false,
+      "id": "1553193746953-0.5903591276958221",
+      "x": 382,
+      "y": 17,
+      "data": null,
+      "notes": "Test Note"
+    }]
+  },
+  "owner": "test@gs",
+  "allowSharing": false,
+  "sharedToProject": false,
+  "version": 1,
+  "description": "Test Board description. Not shared.",
+  "createdBy" : "testuser",
+  "createdOn" : "2019-03-21T20:17:33.618+0000",
+  "updatedBy" : "testuser",
+  "updatedOn" : "2019-03-21T20:17:33.618+0000"
+}
