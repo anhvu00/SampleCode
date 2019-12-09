@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Built-By: anh
+Class-Path: libs/commons-lang3-3.0.jar
+Build-Jdk: 1.8.0_231
+Created-By: Maven Integration for Eclipse
+Main-Class: com.kyron.MainApp
+
