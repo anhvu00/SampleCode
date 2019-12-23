@@ -1,0 +1,2 @@
+JMH S 30 com.kyron.concurrency.MainTest S 70 com.kyron.concurrency.generated.MainTest_execParallelStream_bm_jmhTest S 21 execParallelStream_bm S 10 Throughput E A 1 1 1 E E E E E E E E E E E E E E E E E 
+JMH S 30 com.kyron.concurrency.MainTest S 66 com.kyron.concurrency.generated.MainTest_execSequential_bm_jmhTest S 17 execSequential_bm S 10 Throughput E A 1 1 1 E E E E E E E E E E E E E E E E E 
