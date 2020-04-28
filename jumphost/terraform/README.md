@@ -18,7 +18,7 @@ may not apply here.
 We need privileged access to our corporate resources: VPN, ESXi.
 </p>
 <ol>
-<li>OpenVPN software + credentials to log in https://vpn.columbia.sme-corp.net
+<li>OpenVPN software + credentials to log in 
 <li>Login credentials to corporate ESXi (as root or sysadmin). This allows you
 to create/edit/delete VMs/resources. (TBD: we might need vSphere/vCenter for
 terraform to work)
@@ -30,8 +30,7 @@ We need some knowledge of Ansible, Terraform, and ESXi.
 <h2>OPENVPN</h2>
 <ul>
 <li>Download, install OpenVPN
-<li>Create ‘profile’ from a template (i.e. <a
-href="https://vpn.columbia.sme-corp.net">https://vpn.columbia.sme-corp.net</a>)
+<li>Create ‘profile’ from a template 
 <li>Change default password
 </li>
 </ul>
@@ -48,8 +47,7 @@ VSphere is a suite of applications, including vCenter and ESXi. vSphere is like
 Microsoft Office which contains many subcomponents such as Word and Excel.
 </p>
 <p>
-We access our ESXi via a web console (i.e.<a
-href="https://stark.columbia.sme-corp.net/ui/#/host/login">https://stark.columbia.sme-corp.net/ui/#/host/login</a>).
+We access our ESXi via a web console 
 We can manage VMs, Storage, and Network from the web console.
 </p>
 <p>
