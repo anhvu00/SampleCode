@@ -10,9 +10,9 @@
 
 <li>How to set up a kickstart server/host to install Centos to another host (aka installation by script). 
 
-<li>Source code is in the project jumphost on GitLab (git@gitlab.com:sme-inc/javelin/bootstrap-k8s/jumphost.git).
+<li>Source code is in the project jumphost on GitLab .
 
-<li>This document shows the step-by-step to run it in our ESXi environment (aka “stark”).
+<li>This document shows the step-by-step to run it in our ESXi environment.
 
 <li>Intended audience is developers who want to do DevOps.
 </li>
