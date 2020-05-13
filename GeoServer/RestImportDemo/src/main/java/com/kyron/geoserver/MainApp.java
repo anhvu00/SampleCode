@@ -44,7 +44,7 @@ public class MainApp {
 	private static final String BLUE_URL = "http://localhost:8600/geoserver/gwc/rest/layers/BlueMarble:BlueMarble";
 	private static final String USER = "admin";
 	private static final String PASSWORD = "geoserver";
-	private static final String RESTURL = "http://localhost:8600/geoserver";
+	private static final String RESTURL = "http://10.211.55.7:8600/geoserver";
 
 
 	public static void main(String[] args) {
