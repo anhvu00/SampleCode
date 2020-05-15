@@ -1,37 +1,13 @@
 package com.kyron.geoserver;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import it.geosolutions.geoserver.rest.GeoServerRESTManager;
 import it.geosolutions.geoserver.rest.GeoServerRESTPublisher;
@@ -39,196 +15,46 @@ import it.geosolutions.geoserver.rest.GeoServerRESTReader;
 import it.geosolutions.geoserver.rest.encoder.GSLayerEncoder;
 import it.geosolutions.geoserver.rest.encoder.coverage.GSImageMosaicEncoder;
 
+import com.kyron.geoserver.simplehttp.RestLayerDemo;
+
 public class MainApp {
 
-	private static final String BLUE_URL = "http://localhost:8600/geoserver/gwc/rest/layers/BlueMarble:BlueMarble";
+	private final static Logger LOGGER = LoggerFactory.getLogger(MainApp.class);
+	private static final String RESTURL = "http://10.211.55.7:8600/geoserver";
 	private static final String USER = "admin";
 	private static final String PASSWORD = "geoserver";
-	private static final String RESTURL = "http://10.211.55.7:8600/geoserver";
-
 
 	public static void main(String[] args) {
-		CredentialsProvider provider = getCredentials();
-		/*
-		GeoServerLayer layer = getLayerXML(provider);
-		// edit layer value here ...
-		byte newGutter = 10;
-		layer.setGutter(newGutter);
-		postLayerXML(provider, layer);
-		// review updated data ...
-		layer = getLayerXML(provider);
-		*/
-		System.out.println("begin test...");
-		testImport();
-		System.out.println("end test");
+		LOGGER.info("=== BEGIN DEMO ===");	
+		// uncomment this to test with GeoServer Docker container
+		//testGeoServerDocker();
+		testImport_1();
+		LOGGER.info("=== END DEMO ===");
 	}
-
-	// Credentials for httpclient
-	public static CredentialsProvider getCredentials() {
-
-		CredentialsProvider provider = new BasicCredentialsProvider();
-		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(USER, PASSWORD);
-		provider.setCredentials(AuthScope.ANY, credentials);
-		return provider;
-	}
-
-	// add layer
-	public static void addLayer() {
-
-	}
-
-	// Send a GET request to GeoServer to get a layer in XML format
-	public static GeoServerLayer getLayerXML(CredentialsProvider provider) {
-
-		HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
-		HttpGet getRequest = new HttpGet(BLUE_URL);
-		getRequest.addHeader("accept", "application/xml");
-		HttpResponse response;
-		GeoServerLayer retLayer = null;
-		try {
-			response = client.execute(getRequest);
-			int statusCode = response.getStatusLine().getStatusCode();
-
-			if (statusCode == HttpStatus.SC_OK) {
-
-				HttpEntity httpEntity = response.getEntity();
-				String apiOutput = EntityUtils.toString(httpEntity);
-
-				System.out.println(apiOutput);
-
-				// Use jaxb to unmarshal the response content
-				JAXBContext jaxbContext = JAXBContext.newInstance(GeoServerLayer.class);
-				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-				retLayer = (GeoServerLayer) jaxbUnmarshaller.unmarshal(new StringReader(apiOutput));
-
-				System.out.println("==== POJO ====");
-				System.out.println(retLayer.name);
-				System.out.println(retLayer.metaWidthHeight.getInt());
-				System.out.println(retLayer.getGutter());
-			}
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
-		return retLayer;
-	}
-
-	// Send a POST request with new XML data/payload to update a layer in GeoServer
-	public static void postLayerXML(CredentialsProvider provider, GeoServerLayer inputLayer) {
-
-		HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
-		HttpResponse response;
-
-		// Define a postRequest request
-		HttpPost postRequest = new HttpPost(BLUE_URL);
-		postRequest.addHeader("content-type", "application/xml");
-
-		// Set the request post body with data from input parameter
-		StringWriter writer = new StringWriter();
-		JAXBContext jaxbContext;
-		try {
-
-			// transform POJO to XML
-			jaxbContext = JAXBContext.newInstance(GeoServerLayer.class);
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-			jaxbMarshaller.marshal(inputLayer, writer);
-
-			StringEntity userEntity = new StringEntity(writer.getBuffer().toString());
-			postRequest.setEntity(userEntity);
-			postRequest.setHeader("accept", "application/json");
-			postRequest.setHeader("content-type", "application/xml");
-
-			// Send the request and get response immediately
-			response = client.execute(postRequest);
-
-			// verify the valid error code first
-			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode == HttpStatus.SC_OK) {
-				System.out.println("Layer is updated");
-			} else {
-				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
-			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
-	}
-
-	// Send a GET request to GeoServer to get a layer in JSON format
-	public static String getLayerJson(CredentialsProvider provider) {
-
-		HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
-		HttpResponse response;
-		StringBuilder retJson = new StringBuilder();
-		try {
-			response = client.execute(new HttpGet(BLUE_URL));
-			int statusCode = response.getStatusLine().getStatusCode();
-
-			if (statusCode == HttpStatus.SC_OK) {
-				// read the response, default is json
-				BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
-				String output;
-				while ((output = br.readLine()) != null) {
-					retJson.append(output);
-					System.out.println(retJson.toString());
-				}
-			}
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return retJson.toString();
-	}
-
-	// Send a POST request with new JSON data/payload to update a layer
-	// NOTE: JSON is not recommended for managing GeoServer layers because the JSON
-	// library
-	// has a number of issues with multi-valued properties such as
-	// “parameterFilters”
-	public static void postLayerJson(CredentialsProvider provider, String inputJson) {
-
-		HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
-		HttpResponse response;
-
-		// Define a postRequest request
-		HttpPost postRequest = new HttpPost(BLUE_URL);
-
-		// edit json values here....
-
-		// Set the request post body
-		JSONObject object = new JSONObject(inputJson);
-
-		try {
-			StringEntity userEntity = new StringEntity(object.toString());
-			postRequest.setEntity(userEntity);
-			postRequest.setHeader("accept", "application/json");
-			postRequest.setHeader("content-type", "application/json");
-
-			response = client.execute(postRequest);
-
-			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != HttpStatus.SC_OK) {
-				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
-			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	
+	// A test for GeoServer Docker container runs on localhost:8600
+	public static void testGeoServerDocker() {
+		//change this value to some other number as you test
+		byte newGutter = 10;  
+		RestLayerDemo.demoUpdateLayer(newGutter);
+		
+		// show update data
+		RestLayerDemo.demoGetLayer();
 	}
 
 	// -----------------------------------------------------------
+	
+	public static void testImport_1() {
+		GeoServerCredentials credential = new GeoServerCredentials(RESTURL,USER,PASSWORD);
+        GeoServerParams param = new GeoServerParams("Test","SP27GTIF","C:/TestImage/Chicago/SP27GTIF.TIF");
+        GeoServerUtils util = new GeoServerUtils(credential);
+        if (util.uploadGeoTiff(param)) {
+        	LOGGER.info("C:/TestImage/Chicago/SP27GTIF.TIF is uploaded.");
+        } else {
+        	LOGGER.error("Upload failed.");
+        }
+
+	}
 	
 	public static void testImport() {
 		GeoServerRESTManager manager;

@@ -6,7 +6,7 @@
 //
 
 
-package com.kyron.geoserver;
+package com.kyron.geoserver.simplehttp;
 
 import java.util.ArrayList;
 import java.util.List;
