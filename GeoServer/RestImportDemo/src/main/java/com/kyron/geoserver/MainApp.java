@@ -53,7 +53,6 @@ public class MainApp {
         } else {
         	LOGGER.error("Upload failed.");
         }
-
 	}
 	
 	public static void testImport() {
