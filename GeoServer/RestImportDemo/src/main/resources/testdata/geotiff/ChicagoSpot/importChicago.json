@@ -1,0 +1,13 @@
+{
+   "import": {
+      "targetWorkspace": {
+         "workspace": {
+            "name": "Test"
+         }
+      },
+      "data": {
+        "type": "file",
+        "file": "/opt/geoserver/data_dir/GeoTiff/Sample/Chicago-spot/UTM2GTIF.tif"
+      }
+   }
+}

@@ -6,7 +6,7 @@
 	<artifactId>RestImportDemo</artifactId>
 	<version>1.0</version>
 	<name>MainApp</name>
-		
+
 	<repositories>
 		<!-- GeoServer-manager repository -->
 		<repository>
@@ -26,6 +26,13 @@
 			<artifactId>jersey-client</artifactId>
 			<version>1.19</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>5.2.6.RELEASE</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -73,7 +80,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.21</version> 
+			<version>1.7.21</version>
 		</dependency>
 	</dependencies>
 </project>

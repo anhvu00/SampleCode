@@ -1,0 +1,13 @@
+{
+   "import": {
+      "targetWorkspace": {
+         "workspace": {
+            "name": "Test"
+         }
+      },
+      "data": {
+        "type": "file",
+        "file": "/TestImage/Chicago/UTM2GTIF.TIF"
+      }
+   }
+}

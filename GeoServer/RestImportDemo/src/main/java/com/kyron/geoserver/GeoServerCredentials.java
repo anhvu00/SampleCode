@@ -20,29 +20,28 @@ public class GeoServerCredentials {
 		GeoServerCredentials.geoServerPassword = password;
 	}
 
-	public static String getGeoServerURL() {
+	public String getGeoServerURL() {
 		return geoServerURL;
 	}
 
-	public static void setGeoServerURL(String geoServerURL) {
+	public void setGeoServerURL(String geoServerURL) {
 		GeoServerCredentials.geoServerURL = geoServerURL;
 	}
 
-	public static String getGeoServerUser() {
+	public String getGeoServerUser() {
 		return geoServerUser;
 	}
 
-	public static void setGeoServerUser(String geoServerUser) {
+	public void setGeoServerUser(String geoServerUser) {
 		GeoServerCredentials.geoServerUser = geoServerUser;
 	}
 
-	public static String getGeoServerPassword() {
+	public String getGeoServerPassword() {
 		return geoServerPassword;
 	}
 
-	public static void setGeoServerPassword(String geoServerPassword) {
+	public void setGeoServerPassword(String geoServerPassword) {
 		GeoServerCredentials.geoServerPassword = geoServerPassword;
 	}
-	
 
 }

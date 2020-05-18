@@ -26,9 +26,11 @@ public class GeoServerUtils {
 		gsCred = credential;
 	}
 	
-	// upload a raster to GeoServer
-	// input: GeoServerParams such as workspace, store, and full path image name
-	// output: true = success. false otherwise
+	/** 
+	 * upload a raster to GeoServer
+	 * @param param GeoServerParams such as workspace, store, and full path image name
+	 * @return true = success. false otherwise
+	 */
 	public boolean uploadGeoTiff(GeoServerParams param) {
 		boolean retval = false;
 		GeoServerRESTManager manager;
@@ -55,4 +57,43 @@ public class GeoServerUtils {
 		}
 		return retval;
 	}
+	
+	/** 
+	 * upload a raster to GeoServer, creating new workspace in the process
+	 * @param param GeoServerParams such as workspace, store, and full path image name
+	 * @return true = success. false otherwise
+	 */
+    public boolean uploadGeotiff(boolean createWS, GeoServerParams param) {
+		boolean retval = false;
+		GeoServerRESTManager manager;
+		GeoServerRESTPublisher publisher;
+
+		try {
+            manager = new GeoServerRESTManager(
+            		new URL(gsCred.getGeoServerURL()), 
+            		gsCred.getGeoServerUser(), 
+            		gsCred.getGeoServerPassword());
+            publisher = manager.getPublisher();
+            // add a style (optional) could be in param
+            //publisher.publishStyle(new File(new ClassPathResource("testdata").getFile(),"raster.sld"));
+            
+            // create new workspace
+            if (createWS) {
+             publisher.createWorkspace(param.getWorkspace());
+            }
+            
+			retval = publisher.publishGeoTIFF(
+					param.getWorkspace(),
+					param.getStore(),
+					param.getImageFile());
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		return retval;       
+    }
 }

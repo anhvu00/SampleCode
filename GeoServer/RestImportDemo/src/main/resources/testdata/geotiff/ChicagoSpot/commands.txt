@@ -1,0 +1,6 @@
+curl -v -u admin:geoserver -XPOST -H "accept: application/json" -H "Content-type: application/json" -d @importChicagoLocal.json "http://localhost:8600/geoserver/rest/imports"
+
+// async & execute = don't work...
+curl -v -u admin:geoserver -XPOST -H "accept: application/json" -H "Content-type: application/json" -d @importChicagoLocal.json "http://localhost:8600/geoserver/rest/imports?async=true&execute=true"
+
+curl -v -u admin:geoserver -XPOST "http://localhost:8600/geoserver/rest/imports/3"

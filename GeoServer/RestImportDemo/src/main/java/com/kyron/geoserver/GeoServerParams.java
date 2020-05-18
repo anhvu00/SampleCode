@@ -27,35 +27,35 @@ public class GeoServerParams {
 		GeoServerParams.imageFile = new File(fullPathImageName);
 	}
 
-	public static String getWorkspace() {
+	public String getWorkspace() {
 		return workspace;
 	}
 
-	public static void setWorkspace(String workspace) {
+	public void setWorkspace(String workspace) {
 		GeoServerParams.workspace = workspace;
 	}
 
-	public static String getStore() {
+	public String getStore() {
 		return store;
 	}
 
-	public static void setStore(String store) {
+	public void setStore(String store) {
 		GeoServerParams.store = store;
 	}
 
-	public static String getImage() {
+	public String getImage() {
 		return image;
 	}
 
-	public static void setImage(String image) {
+	public void setImage(String image) {
 		GeoServerParams.image = image;
 	}
 
-	public static File getImageFile() {
+	public File getImageFile() {
 		return imageFile;
 	}
 
-	public static void setImageFile(File imageFile) {
+	public void setImageFile(File imageFile) {
 		GeoServerParams.imageFile = imageFile;
 	}
 	
