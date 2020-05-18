@@ -52,37 +52,46 @@ import org.json.JSONObject;
  *
  */
 public class RestLayerDemo {
-	private static final String BLUE_URL = "http://localhost:8600/geoserver/gwc/rest/layers/BlueMarble:BlueMarble";
-	private static final String USER = "admin";
-	private static final String PASSWORD = "geoserver";
+//	private static final String BLUE_URL = "http://192.168.1.211:8600/geoserver/gwc/rest/layers/BlueMarble:BlueMarble";
+//	private static final String USER = "admin";
+//	private static final String PASSWORD = "geoserver";
+	
+	private String storeUrl;
+	private String user;
+	private String password;
+	CredentialsProvider provider;
 
-	// TESTS....
-	public static void demoGetLayer() {
-		CredentialsProvider provider = getCredentials();
-		GeoServerLayer layer = getLayerXML(provider);
+	// constructor
+	public RestLayerDemo(String storeURL, String user, String password) {
+		this.storeUrl = storeURL;
+		this.user = user;
+		this.password = password;
+		provider = getCredentials();
+	}
+	
+	public GeoServerLayer getLayer() {
+		return getLayerXML(provider);
 	}
 
-	// change gutter value to 10
-	public static void demoUpdateLayer(byte newGutter) {
-		CredentialsProvider provider = getCredentials();
-		GeoServerLayer layer = getLayerXML(provider);
+	// change gutter value. Could be anything in the layer xml.
+	public void updateLayerDemo(GeoServerLayer layer, byte newGutter) {
 		// edit layer value
 		layer.setGutter(newGutter);
 		postLayerXML(provider, layer);
 	}
 
 	// Credentials for httpclient
-	public static CredentialsProvider getCredentials() {
+	public CredentialsProvider getCredentials() {
 		CredentialsProvider provider = new BasicCredentialsProvider();
-		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(USER, PASSWORD);
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.user, this.password);
 		provider.setCredentials(AuthScope.ANY, credentials);
 		return provider;
 	}
 
 	// Send a GET request to GeoServer to get a layer in XML format
-	public static GeoServerLayer getLayerXML(CredentialsProvider provider) {
+	public GeoServerLayer getLayerXML(CredentialsProvider provider) {
 		HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
-		HttpGet getRequest = new HttpGet(BLUE_URL);
+		HttpGet getRequest = new HttpGet(this.storeUrl);
 		getRequest.addHeader("accept", "application/xml");
 		HttpResponse response;
 		GeoServerLayer retLayer = null;
@@ -117,12 +126,12 @@ public class RestLayerDemo {
 	}
 
 	// Send a POST request with new XML data/payload to update a layer in GeoServer
-	public static void postLayerXML(CredentialsProvider provider, GeoServerLayer inputLayer) {
+	public void postLayerXML(CredentialsProvider provider, GeoServerLayer inputLayer) {
 		HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
 		HttpResponse response;
 
 		// Define a postRequest request
-		HttpPost postRequest = new HttpPost(BLUE_URL);
+		HttpPost postRequest = new HttpPost(this.storeUrl);
 		postRequest.addHeader("content-type", "application/xml");
 
 		// Set the request post body with data from input parameter
@@ -162,12 +171,12 @@ public class RestLayerDemo {
 	}
 
 	// Send a GET request to GeoServer to get a layer in JSON format
-	public static String getLayerJson(CredentialsProvider provider) {
+	public String getLayerJson(CredentialsProvider provider) {
 		HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
 		HttpResponse response;
 		StringBuilder retJson = new StringBuilder();
 		try {
-			response = client.execute(new HttpGet(BLUE_URL));
+			response = client.execute(new HttpGet(this.storeUrl));
 			int statusCode = response.getStatusLine().getStatusCode();
 
 			if (statusCode == HttpStatus.SC_OK) {
@@ -191,12 +200,12 @@ public class RestLayerDemo {
 	// NOTE: JSON is not recommended for managing GeoServer layers because the JSON
 	// library has a number of issues with multi-valued properties such as
 	// "parameterFilters"
-	public static void postLayerJson(CredentialsProvider provider, String inputJson) {
+	public void postLayerJson(CredentialsProvider provider, String inputJson) {
 		HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
 		HttpResponse response;
 
 		// Define a postRequest request
-		HttpPost postRequest = new HttpPost(BLUE_URL);
+		HttpPost postRequest = new HttpPost(this.storeUrl);
 
 		// edit json values here....
 
