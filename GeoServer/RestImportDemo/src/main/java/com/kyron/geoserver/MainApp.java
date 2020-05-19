@@ -25,6 +25,10 @@ public class MainApp {
 		testImportGeoTiff();
 		LOGGER.info("=== IMPORT GEOTIFF TO A NEW WORKSPACE " + RESTURL + " ===");
 		testImportGeoTiffNewWorkspace();
+		LOGGER.info("=== DELETE STORE " + RESTURL + " ===");
+		testDeleteStore();
+		LOGGER.info("=== DELETE WORKSPACE " + RESTURL + " ===");
+		testDeleteWorkspace();
 		LOGGER.info("=== UPDATE LAYER " + BLUE_URL + " ===");		
 		testGeoServerDocker();
 		LOGGER.info("=== END DEMO ===");
@@ -99,6 +103,31 @@ public class MainApp {
         	LOGGER.info(fullPathImageName + " is uploaded.");
         } else {
         	LOGGER.error("Upload failed.");
+        }
+	}
+	
+	public static void testDeleteStore() {
+		String workspace = "Test";
+		String store = "SP27GTIF";
+
+		GeoServerCredentials credential = new GeoServerCredentials(RESTURL,USER,PASSWORD);
+        GeoServerUtils util = new GeoServerUtils(credential);
+        if (util.deleteRasterStore(workspace, store)) {
+        	LOGGER.info(store + " is deleted.");
+        } else {
+        	LOGGER.error("Delete store failed.");
+        }
+	}
+	
+	public static void testDeleteWorkspace() {
+		String workspace = "AUTOWS";
+
+		GeoServerCredentials credential = new GeoServerCredentials(RESTURL,USER,PASSWORD);
+        GeoServerUtils util = new GeoServerUtils(credential);
+        if (util.deleteWorkspace(workspace)) {
+        	LOGGER.info(workspace + " is deleted.");
+        } else {
+        	LOGGER.error("Delete workspace failed.");
         }
 	}
 	

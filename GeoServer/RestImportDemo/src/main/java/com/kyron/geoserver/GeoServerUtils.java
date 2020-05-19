@@ -19,11 +19,24 @@ import it.geosolutions.geoserver.rest.GeoServerRESTPublisher;
 public class GeoServerUtils {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoServerUtils.class);
 	private static GeoServerCredentials gsCred;
+	private static GeoServerRESTManager manager;
+	private static GeoServerRESTPublisher publisher;
 
 	// constructor
 	public GeoServerUtils(GeoServerCredentials credential) {
 		LOGGER.info("Created " + this.getClass().getSimpleName());
 		gsCred = credential;
+        try {
+			manager = new GeoServerRESTManager(
+					new URL(gsCred.getGeoServerURL()), 
+					gsCred.getGeoServerUser(), 
+					gsCred.getGeoServerPassword());
+	        publisher = manager.getPublisher();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/** 
@@ -33,23 +46,12 @@ public class GeoServerUtils {
 	 */
 	public boolean uploadGeoTiff(GeoServerParams param) {
 		boolean retval = false;
-		GeoServerRESTManager manager;
-		GeoServerRESTPublisher publisher;
 
 		try {
-            manager = new GeoServerRESTManager(
-            		new URL(gsCred.getGeoServerURL()), 
-            		gsCred.getGeoServerUser(), 
-            		gsCred.getGeoServerPassword());
-            publisher = manager.getPublisher();
-
 			retval = publisher.publishGeoTIFF(
 					param.getWorkspace(),
 					param.getStore(),
 					param.getImageFile());
-
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
@@ -65,15 +67,9 @@ public class GeoServerUtils {
 	 */
     public boolean uploadGeotiff(boolean createWS, GeoServerParams param) {
 		boolean retval = false;
-		GeoServerRESTManager manager;
-		GeoServerRESTPublisher publisher;
 
 		try {
-            manager = new GeoServerRESTManager(
-            		new URL(gsCred.getGeoServerURL()), 
-            		gsCred.getGeoServerUser(), 
-            		gsCred.getGeoServerPassword());
-            publisher = manager.getPublisher();
+
             // add a style (optional) could be in param
             //publisher.publishStyle(new File(new ClassPathResource("testdata").getFile(),"raster.sld"));
             
@@ -87,13 +83,38 @@ public class GeoServerUtils {
 					param.getStore(),
 					param.getImageFile());
 
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
 		return retval;       
+    }
+    
+    // delete workspace and all the stores in it
+    public boolean deleteWorkspace(String workspace) {
+    	boolean retval = false;
+    	boolean recursive = true;
+    	
+    	try {
+			LOGGER.warn("Delete workspace " + workspace);
+	    	retval = publisher.removeWorkspace(workspace, recursive);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+    	return retval;
+    }
+    
+    public boolean deleteRasterStore(String workspace, String store) {
+    	boolean retval = false;
+    	boolean recursive = true;
+    	
+    	try {
+			LOGGER.warn("Delete workspace:store " + workspace + ":" + store);
+	    	retval = publisher.removeCoverageStore(workspace, store, recursive);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+    	return retval;
     }
 }
