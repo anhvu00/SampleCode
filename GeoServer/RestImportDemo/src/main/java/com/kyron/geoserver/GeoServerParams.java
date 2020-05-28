@@ -1,6 +1,7 @@
 package com.kyron.geoserver;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * POJO holding specific data for http request parameters
@@ -49,14 +50,18 @@ public class GeoServerParams {
 
 	public void setImage(String image) {
 		GeoServerParams.image = image;
+		// also change the imageFile
+		GeoServerParams.imageFile = new File(image);
 	}
 
 	public File getImageFile() {
 		return imageFile;
 	}
 
-	public void setImageFile(File imageFile) {
+	public void setImageFile(File imageFile) throws IOException {
 		GeoServerParams.imageFile = imageFile;
+		// also change the full path image name
+		GeoServerParams.image = imageFile.getCanonicalPath();
 	}
 	
 }

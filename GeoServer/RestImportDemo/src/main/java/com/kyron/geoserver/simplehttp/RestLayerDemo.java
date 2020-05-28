@@ -28,6 +28,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+
 /**
  * The goal is to demonstrate interaction with GeoServer REST API with just
  * simple REST calls. This class gets and updates an existing layer on GeoServer
