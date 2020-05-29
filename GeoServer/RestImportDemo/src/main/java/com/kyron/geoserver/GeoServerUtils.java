@@ -135,8 +135,6 @@ public class GeoServerUtils {
 					param.getImageFile().toURI());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return retval;
 	}
@@ -205,6 +203,7 @@ public class GeoServerUtils {
 		}
 	}
 	
+	// not work: groupWriter.setBounds(param.getCrs(), 0, 5000000, 0, 5000000);
 	public boolean createLayerGroup(GroupParams param) {       
         GSLayerGroupEncoder groupWriter = new GSLayerGroupEncoder();
         // minx, maxx, miny, maxy
@@ -214,8 +213,10 @@ public class GeoServerUtils {
 //        		param.getMaxX(),
 //        		param.getMinY(),
 //        		param.getMaxY());
-        groupWriter.addLayer("ANH-DAKOTA:SF-GEOTIFF");
-        groupWriter.addLayer("ANH-DAKOTA:bugsites");
+        for (String layer : param.getLayers()) {
+        	groupWriter.addLayer(layer);
+        }
+
         return publisher.createLayerGroup(param.getGroupName(), groupWriter);
 	}
 } // end class

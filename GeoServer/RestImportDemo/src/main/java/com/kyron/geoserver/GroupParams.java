@@ -1,5 +1,7 @@
 package com.kyron.geoserver;
 
+import java.util.ArrayList;
+
 /**
  * Parameters for creating layer-group
  * GeoServer Coordinate Reference System (CRS) like "EPSG:26713"
@@ -13,11 +15,13 @@ public class GroupParams {
 	private String groupName;
 	private String crs;
 	private int minX, maxX, minY, maxY;
+	private ArrayList<String> layers;
 	
 	// constructor 1
-	public GroupParams(String name, String crs) {
+	public GroupParams(String name, String crs, ArrayList<String> layers) {
 		this.groupName = name;
 		this.crs = crs;
+		this.layers = layers ;
 	}
 	
 	// constructor 2
@@ -77,5 +81,15 @@ public class GroupParams {
 	public void setMaxY(int maxY) {
 		this.maxY = maxY;
 	}
+
+	public ArrayList<String> getLayers() {
+		return layers;
+	}
+
+	public void setLayers(ArrayList<String> layers) {
+		this.layers = layers;
+	}
+
+
 
 }
