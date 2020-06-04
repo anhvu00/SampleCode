@@ -12,20 +12,24 @@ import java.io.IOException;
  *
  */
 public class GeoServerParams {
-	private static String workspace;
-	private static String store;
-	private static String image;
-	private static File imageFile;
+	private String workspace;
+	private String store;
+	private String layerName;
+	private String image;
+	private File imageFile;
+	private File styleFile;
+	private String styleName;
+	private String coordSys;  // Coordinate Reference System
 
 	// constructor
 	// workspace = GeoServer Workspace name
 	// store = GeoServer Store name, usually the same as the image file name
 	// fullPathImageName = Full path image (i.e. "C:/data/myRasterImage.tiff")
 	public GeoServerParams(String workspace, String store, String fullPathImageName) {
-		GeoServerParams.workspace = workspace;
-		GeoServerParams.store = store;
-		GeoServerParams.image = fullPathImageName;
-		GeoServerParams.imageFile = new File(fullPathImageName);
+		this.workspace = workspace;
+		this.store = store;
+		this.image = fullPathImageName;
+		this.imageFile = new File(fullPathImageName);
 	}
 
 	public String getWorkspace() {
@@ -33,7 +37,7 @@ public class GeoServerParams {
 	}
 
 	public void setWorkspace(String workspace) {
-		GeoServerParams.workspace = workspace;
+		this.workspace = workspace;
 	}
 
 	public String getStore() {
@@ -41,7 +45,7 @@ public class GeoServerParams {
 	}
 
 	public void setStore(String store) {
-		GeoServerParams.store = store;
+		this.store = store;
 	}
 
 	public String getImage() {
@@ -49,9 +53,9 @@ public class GeoServerParams {
 	}
 
 	public void setImage(String image) {
-		GeoServerParams.image = image;
+		this.image = image;
 		// also change the imageFile
-		GeoServerParams.imageFile = new File(image);
+		this.imageFile = new File(image);
 	}
 
 	public File getImageFile() {
@@ -59,9 +63,41 @@ public class GeoServerParams {
 	}
 
 	public void setImageFile(File imageFile) throws IOException {
-		GeoServerParams.imageFile = imageFile;
+		this.imageFile = imageFile;
 		// also change the full path image name
-		GeoServerParams.image = imageFile.getCanonicalPath();
+		this.image = imageFile.getCanonicalPath();
+	}
+
+	public File getStyleFile() {
+		return styleFile;
+	}
+
+	public void setStyleFile(File styleFile) {
+		this.styleFile = styleFile;
+	}
+
+	public String getStyleName() {
+		return styleName;
+	}
+
+	public void setStyleName(String styleName) {
+		this.styleName = styleName;
+	}
+
+	public String getLayerName() {
+		return layerName;
+	}
+
+	public void setLayerName(String layerName) {
+		this.layerName = layerName;
+	}
+
+	public String getCoordSys() {
+		return coordSys;
+	}
+
+	public void setCoordSys(String coordSys) {
+		this.coordSys = coordSys;
 	}
 	
 }

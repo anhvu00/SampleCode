@@ -14,8 +14,8 @@ import org.springframework.core.io.ClassPathResource;
 
 import it.geosolutions.geoserver.rest.GeoServerRESTManager;
 import it.geosolutions.geoserver.rest.GeoServerRESTPublisher;
-import it.geosolutions.geoserver.rest.GeoServerRESTReader;
 import it.geosolutions.geoserver.rest.GeoServerRESTPublisher.ParameterConfigure;
+import it.geosolutions.geoserver.rest.GeoServerRESTReader;
 import it.geosolutions.geoserver.rest.decoder.RESTLayer;
 import it.geosolutions.geoserver.rest.decoder.RESTLayerList;
 import it.geosolutions.geoserver.rest.decoder.utils.NameLinkElem;
@@ -24,6 +24,7 @@ import it.geosolutions.geoserver.rest.encoder.GSLayerGroupEncoder;
 /**
  * Provide CRUD operations with GeoServer through its REST API. Use
  * geoserver-manager from https://github.com/geosolutions-it/geoserver-manager
+ * Test on GeoServer v2.16.2
  * 
  * @author anh
  *
@@ -108,7 +109,7 @@ public class GeoServerUtils {
 				publisher.createWorkspace(param.getWorkspace());
 			}
 			// create default style
-			File sldFile = new ClassPathResource("testdata/restteststyle.sld").getFile();
+			File sldFile = new ClassPathResource("testdata/style/restteststyle.sld").getFile();
 			publisher.publishStyle(sldFile, "anh-raster");
 
 			retval = publisher.publishImageMosaic(param.getWorkspace(), param.getStore(), param.getImageFile(),
@@ -129,10 +130,35 @@ public class GeoServerUtils {
 			if (createWS) {
 				publisher.createWorkspace(param.getWorkspace());
 			}
-			retval = publisher.publishShpCollection(
-					param.getWorkspace(), 
-					param.getStore(), 
+			retval = publisher.publishShpCollection(param.getWorkspace(), param.getStore(),
 					param.getImageFile().toURI());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return retval;
+	}
+	
+	/*
+	 * Upload a shapefile with a style as its default
+	 */
+	public boolean uploadShapefileWithStyle(boolean createWS, GeoServerParams param) {
+		boolean retval = false;
+		try {
+			// create new workspace
+			if (createWS) {
+				publisher.createWorkspace(param.getWorkspace());
+			}		
+			// must add style before layer
+			boolean pubStyleRetval = publisher.publishStyle(param.getStyleFile(), param.getStyleName());
+			if (pubStyleRetval) {
+		        retval = publisher.publishShp(
+		        		param.getWorkspace(), 
+		        		param.getStore(),
+		                param.getLayerName(),
+		                param.getImageFile(), 
+		                param.getCoordSys(), 
+		                param.getStyleName());				
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -202,21 +228,21 @@ public class GeoServerUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// not work: groupWriter.setBounds(param.getCrs(), 0, 5000000, 0, 5000000);
-	public boolean createLayerGroup(GroupParams param) {       
-        GSLayerGroupEncoder groupWriter = new GSLayerGroupEncoder();
-        // minx, maxx, miny, maxy
+	public boolean createLayerGroup(GroupParams param) {
+		GSLayerGroupEncoder groupWriter = new GSLayerGroupEncoder();
+		// minx, maxx, miny, maxy
 //        groupWriter.setBounds(
 //        		param.getCrs(),
 //        		param.getMinX(),
 //        		param.getMaxX(),
 //        		param.getMinY(),
 //        		param.getMaxY());
-        for (String layer : param.getLayers()) {
-        	groupWriter.addLayer(layer);
-        }
+		for (String layer : param.getLayers()) {
+			groupWriter.addLayer(layer);
+		}
 
-        return publisher.createLayerGroup(param.getGroupName(), groupWriter);
+		return publisher.createLayerGroup(param.getGroupName(), groupWriter);
 	}
 } // end class

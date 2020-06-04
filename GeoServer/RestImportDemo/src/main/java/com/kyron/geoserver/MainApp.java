@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -54,13 +55,14 @@ public class MainApp {
 	}
 
 	/*
-	 * We can test more when the GeoServer is running on a VM.
+	 * We have more liberty when the GeoServer is running on a VM.
 	 * 
 	 */
 	private static void demoVM(String restUrl) {	
 		String workspace = testImportGeoTiffNewWorkspace(restUrl);
 		testImportGeoTiff(restUrl, workspace);
-		testLayerGroup(restUrl);		
+		testLayerGroup(restUrl);
+		testStyle(restUrl);
 	}
 
 	// -----------------------------------------------------------
@@ -180,6 +182,56 @@ public class MainApp {
 		// GroupParams gparam = new GroupParams(layerGroup, crs, 589980, 609000, 4913700, 4928010);
 		GroupParams gparam = new GroupParams(layerGroup, crs, layers);
 		util.createLayerGroup(gparam);
+	}
+	
+	/*
+	 * Import a shape file of points with a style replacing the points
+	 * with smiley icons. The icons must be on GeoServer host,
+	 * under data_dir/ folder (i.e. named anh-smiley.png).
+	 */
+	private static void testStyle(String restUrl) {
+		String workspace = "DEMO-STYLE";
+		String shapeStore = "SF-BUGSITES";
+		String fullPathImageName = "";
+		File shapeFile;
+		File styleFile;
+		boolean doCreateWS;
+		
+		GeoServerCredentials credential = new GeoServerCredentials(restUrl, USER, PASSWORD);
+		GeoServerParams param = new GeoServerParams(workspace, shapeStore, fullPathImageName);
+		GeoServerUtils util = new GeoServerUtils(credential);
+
+		try {
+			// set up a style 
+			styleFile = new ClassPathResource("testdata/style/point-smiley.sld").getFile();
+			param.setStyleFile(styleFile);
+			param.setStyleName("POINT-SMILEY");
+			
+			shapeFile = new ClassPathResource("testdata/shapefile/bugsites.zip").getFile();
+			param.setImageFile(shapeFile); 
+			param.setStore(shapeStore); 
+			
+			// set layer name = image name (without extension)
+			String layerName = FilenameUtils.getBaseName(shapeFile.getName());
+			param.setLayerName(layerName);
+			
+			// set coordinate system for the layer
+			param.setCoordSys("EPSG:26713");
+			
+			// upload to a non-existing workspace
+			doCreateWS = true;
+
+			if (util.uploadShapefileWithStyle(doCreateWS, param)) {
+				LOGGER.info(param.getImage() + " is uploaded.");
+			} else {
+				LOGGER.error("Upload failed.");
+			}
+			
+			// print out new layer
+			testGetLayer(restUrl, workspace, param.getLayerName() );
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
 	}
 	
 	// -----------------------------------------------------------	
