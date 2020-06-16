@@ -211,24 +211,46 @@ public class GeoServerUtils {
 	}
 
 	// get a specific layer
-	public void getLayer(String workspace, String layer) {
+	public RESTLayer getLayer(String workspace, String layer) {
+		RESTLayer retLayer = null;
 		try {
 			GeoServerRESTReader reader = new GeoServerRESTReader(gsCred.getGeoServerURL(), gsCred.getGeoServerUser(),
 					gsCred.getGeoServerPassword());
-			RESTLayer myLayer = reader.getLayer(workspace, layer);
-			LOGGER.info("name=" + myLayer.getName() + " ");
-			LOGGER.info("type=" + myLayer.getTypeString() + " ");
-			LOGGER.info("title=" + myLayer.getTitle() + " ");
-			LOGGER.info("abstract=" + myLayer.getAbstract() + " ");
-			LOGGER.info("default style=" + myLayer.getDefaultStyle() + " ");
-			// LOGGER.info("name space=" + myLayer.getNameSpace() + " ");
-			LOGGER.info("resource url=" + myLayer.getResourceUrl() + " ");
+			retLayer = reader.getLayer(workspace, layer);
+			LOGGER.info("name=" + retLayer.getName() + " ");
+			LOGGER.info("type=" + retLayer.getTypeString() + " ");
+			LOGGER.info("title=" + retLayer.getTitle() + " ");
+			LOGGER.info("abstract=" + retLayer.getAbstract() + " ");
+			LOGGER.info("default style=" + retLayer.getDefaultStyle() + " ");
+			// LOGGER.info("name space=" + retLayer.getNameSpace() + " ");
+			LOGGER.info("resource url=" + retLayer.getResourceUrl() + " ");
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
+		return retLayer;
 	}
-
+	
+	public boolean deleteVectorLayer(String workspace, String store, String layerName) {
+		boolean retval = publisher.unpublishFeatureType(workspace, store, layerName);
+		//retval = retval && publisher.removeLayer(workspace, layerName);
+		return retval;
+	}
+	
+	// from geoserver-manager StoreIntegrationTest.testCreateDeleteDatastore()
+	public boolean addVectorLayer(LayerParams param) {
+        boolean published = publisher.publishDBLayer(
+        		param.getWorkspace(), 
+        		param.getStore(), 
+        		param.getFte(), 
+        		param.getLayerEncoder());
+        if (published) {
+        	LOGGER.info("Layer " + param.getLayerName() + " is published.");
+        } else {
+        	LOGGER.error("Fail to publish layer " + param.getLayerName());
+        }
+        return published;
+	}
 	// not work: groupWriter.setBounds(param.getCrs(), 0, 5000000, 0, 5000000);
 	public boolean createLayerGroup(GroupParams param) {
 		GSLayerGroupEncoder groupWriter = new GSLayerGroupEncoder();

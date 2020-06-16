@@ -13,6 +13,8 @@ import org.springframework.core.io.ClassPathResource;
 import com.kyron.geoserver.simplehttp.GeoServerLayer;
 import com.kyron.geoserver.simplehttp.RestLayerDemo;
 
+import it.geosolutions.geoserver.rest.decoder.RESTLayer;
+
 public class MainApp {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(MainApp.class);
@@ -23,8 +25,8 @@ public class MainApp {
 
 	public static void main(String[] args) {
 		LOGGER.info("=== BEGIN DEMO ===");
-		LOGGER.info("---- DEMO DOCKER GEOSERVER " + BLUE_URL + "----");
-		demoDocker(BLUE_URL);
+		//LOGGER.info("---- DEMO DOCKER GEOSERVER " + BLUE_URL + "----");
+		//demoDocker(BLUE_URL);
 		LOGGER.info("---- DEMO VM GEOSERVER " + REST_URL + "----");
 		demoVM(REST_URL);
 		LOGGER.info("=== END DEMO ===");
@@ -63,6 +65,7 @@ public class MainApp {
 		testImportGeoTiff(restUrl, workspace);
 		testLayerGroup(restUrl);
 		testStyle(restUrl);
+		testAddLayer(restUrl, "DEMO-LAYER-GROUP");
 	}
 
 	// -----------------------------------------------------------
@@ -117,6 +120,35 @@ public class MainApp {
 		} else {
 			LOGGER.error("Upload failed.");
 		}
+	}
+	
+	/*
+	 * In GeoServer, 1 store only has 1 layer.
+	 * This function removes the layer, then add it again.
+	 * Only works for Vector (shapefile, featuretypes REST endpoint)
+	 */
+	private static boolean testAddLayer(String restUrl, String workspace) {
+		String layer = "archsites";
+		String store = "SF-SHAPE";
+		String crs = "EPSG:26713";
+		String style = "point";
+		boolean ready = true;
+		boolean retval = false;
+		
+		LOGGER.info("=== ADD A LAYER " + layer + " to workspace "+ workspace + " ===");
+		LayerParams lparams = new LayerParams(workspace, store, layer, crs, style);
+		GeoServerCredentials credential = new GeoServerCredentials(restUrl, USER, PASSWORD);
+		GeoServerUtils util = new GeoServerUtils(credential);
+
+		// see if layer exists
+		RESTLayer tgtLayer = util.getLayer(workspace, layer);
+		if (tgtLayer != null) {
+			ready = util.deleteVectorLayer(workspace, store, layer);
+		} 
+		if (ready) {
+			retval = util.addVectorLayer(lparams);
+		}
+		return retval;
 	}
 
 	/*
