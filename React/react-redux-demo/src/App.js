@@ -2,7 +2,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { OFF, ON, ADD, MINUS } from './reducer';
+import { OFF, ON, ADD, MINUS, ADD_REMINDER, DEL_REMINDER, CART_ADD, CART_EDIT, CART_DEL } from './reducer';
 
 /*
 Purpose:
@@ -25,6 +25,7 @@ To do:
 export class App extends React.Component {
   // part 1 = Button ON/OFF
   // part 2 = Button ADD/MINUS. Test update different parts of the State.
+  // part 3 = Button ADD/DEL_REMINDER. Add and delete a reminder to an array.
   render() {
     console.log('App:'); console.log(this.props);
     return (
@@ -43,6 +44,17 @@ export class App extends React.Component {
           <button onClick={this.props.onAgeUp}>Age Up</button>
           <button onClick={this.props.onAgeDown}>Age Down</button>
         </div>
+        <div>
+          <p>Reminder: {this.props.reminderAry}</p>
+          <button onClick={this.props.onAddReminder}>Add Reminder</button>
+          <button onClick={this.props.onDelReminder}>Delete Reminder</button>
+        </div>
+        <div>
+          <p>Cart: {this.props.cartData.one}</p>
+          <button onClick={this.props.onCartAdd}>Add item to cart</button>
+          <button onClick={this.props.onCartEdit}>Edit item in cart</button>
+          <button onClick={this.props.onCartDel}>Delete item in cart</button>
+        </div>
       </div>
     );
   }
@@ -53,6 +65,8 @@ const mapStateToProps = state => {
   return {
     person: state.person,
     message: state.message,
+    reminderAry: state.reminderAry,
+    cartData: state.cartData,
   };
 };
 
@@ -62,9 +76,39 @@ const mapDispachToProps = dispatch => {
     offHandler: () => dispatch({ type: OFF, message: 'OFF' }),
     onHandler: () => dispatch({ type: ON, message: 'ON' }),
     onAgeUp: () => dispatch({ type: ADD, value: 1 }),
-    onAgeDown: () => dispatch({ type: MINUS, value: 1 })
-  };
+    onAgeDown: () => dispatch({ type: MINUS, value: 1 }),
+    onAddReminder: () => dispatch({ type: ADD_REMINDER, payload: 'BUY STAMPS'}),
+    onDelReminder: () => dispatch({ type: DEL_REMINDER, payload: 'BUY STAMPS'}),
+    // note: click n times, only add once because same name "Pick"
+    onCartAdd: () => dispatch({ type: CART_ADD, payload: {
+      Pick: {
+        name: 'LAR -3.0', 
+        amount: 1}
+      } }),
+    // note: replace the only pick above with this pick
+    onCartEdit: () => dispatch({ type: CART_EDIT, payload:  {
+      Pick_2: {
+        name: 'Over 46 LAR@BAL', 
+        amount: 200}
+      } }),
+    // note: delete the pick with same name ("Pick" or "Pick_2")
+    // onCartDel: () => dispatch({ type: CART_DEL, payload:  {
+    //   Pick: {
+    //     name: 'LAR -3.0', 
+    //     amount: 200}
+    //   } }),
+    onCartDel: () => dispatch( createPickContent ),  
+  }; 
 };
+
+// is it possible to create a helper function for dispatch()?
+let createPickContent = 
+   { type: CART_DEL, payload:  {
+    Pick_2: {
+      name: 'LAR -3.0', 
+      amount: 200}
+    } };
+
 
 // bind Redux to React
 export default connect(
