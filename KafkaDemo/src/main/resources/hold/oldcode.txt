@@ -1,0 +1,111 @@
+// Generic DTO example
+	/*
+	 * Notice that when initializing our KafkaJsonDeserializer, you have to pass the
+	 * Object type as a constructor argument.
+	 */
+	static void runConsumerDeserialize() {
+		Properties props = new Properties();
+		props.setProperty("bootstrap.servers", "localhost:9092");
+		props.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+		props.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+//		props.setProperty("group.id", "test-group");
+//		props.setProperty("enable.auto.commit", "true");
+//		props.setProperty("auto.commit.interval.ms", "1000");
+//		props.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+//		props.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+		KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+		
+//		Consumer<String, User> consumer = new KafkaConsumer<String, User>(props, new Deserializer<String>(),
+//				new KafkaJsonDeserializer<User>(User.class));
+
+		// Subscribe to the topic
+		consumer.subscribe(Collections.singletonList("USER-TOPIC"));
+	}
+
+
+	static void runProducerUserSerializer_1(String topic) {
+		Properties props = new Properties();
+		props.put("bootstrap.servers", "localhost:9092");
+		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+		props.put("value.serializer", "com.kyron.kafka.dto.UserSerializer");
+
+		// create a user
+		User u = new User("anh", 27);
+		try (Producer<String, User> producer = new KafkaProducer<>(props)) {
+			producer.send(new ProducerRecord<String, User>(topic, u));
+			String msg = u.toString();
+			LOG.info("Message " + msg + " sent !!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	static void runConsumerUserDeserializer_1(String topic) {
+		Properties props = new Properties();
+		props.put("bootstrap.servers", "localhost:9092");
+		props.put("group.id", "test-1");
+		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+		props.put("value.deserializer", "com.kyron.kafka.dto.UserDeserializer");
+
+		try (KafkaConsumer<String, User> consumer = new KafkaConsumer<>(props)) {
+			consumer.subscribe(Collections.singletonList(topic));
+			while (true) {
+				ConsumerRecords<String, User> messages = consumer.poll(Duration.ofSeconds(1));
+				for (ConsumerRecord<String, User> message : messages) {
+					if (messages == null) {
+						LOG.info("null message");
+					} else {
+						LOG.info("Message=" + message.value().toString());
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+/*
+	static void runProducer_1(String topic, int maxNumMsgs) {
+		Producer<Long, String> producer = createProducer();
+
+		for (int index = 0; index < maxNumMsgs; index++) {
+			final ProducerRecord<Long, String> record = new ProducerRecord<Long, String>(topic,
+					"This is record #" + index);
+			try {
+				RecordMetadata metadata = producer.send(record).get();
+				String msg = "Record sent with key " + index + " to partition " + metadata.partition() + " with offset "
+						+ metadata.offset();
+				LOG.info(msg);
+			} catch (Exception e) {
+				LOG.error(e);
+			}
+		}
+	}
+
+	// Helper functions
+	public static Producer<Long, String> createProducer() {
+		Properties props = new Properties();
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, IKafkaConstants.KAFKA_BROKERS);
+		props.put(ProducerConfig.CLIENT_ID_CONFIG, IKafkaConstants.CLIENT_ID);
+		props.put(ProducerConfig.ACKS_CONFIG, IKafkaConstants.ACK);
+		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class.getName());
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+		return new KafkaProducer<>(props);
+	}
+
+	public static Consumer<Long, String> createConsumer() {
+		final Properties props = new Properties();
+		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, IKafkaConstants.KAFKA_BROKERS);
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, IKafkaConstants.GROUP_ID_CONFIG);
+		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
+		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+		props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, IKafkaConstants.MAX_POLL_RECORDS);
+		props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, IKafkaConstants.OFFSET_RESET_EARLIER);
+
+		final Consumer<Long, String> consumer = new KafkaConsumer<>(props);
+		consumer.subscribe(Collections.singletonList(IKafkaConstants.TOPIC_NAME));
+		return consumer;
+	}
+	*/

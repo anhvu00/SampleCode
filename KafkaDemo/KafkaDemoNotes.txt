@@ -1,0 +1,14 @@
+10/12/20
+what we could program with Kafka producer, consumer, stream (KStream, KTable)
+make a utility library
+
+Need:
+- Start Zookeeper service (localhost)
+- Start Kafka server (localhost)
+
+DONE:
+Java DTO/POJO -> Kafka producer -> Kafka topic
+Kalfka topic -> Kafka consumer -> deserialize to java DTO/POJO
+TODO:
+Kalfka topic -> Kafka stream enrich -> another Kafka topic
+java DTO/POJO -> Solr Document -> Solr (via http. Need a running local Solr server)
