@@ -15,7 +15,7 @@ java DTO/POJO -> Solr Document -> Solr (via http. Need a running local Solr serv
 
 Input sample data to zoo
 
-cd D:\Software\Kafka\25\bin\windows
+cd D:\Software\Kafka\26\bin\windows
 
 [start zoo on windows]
 zookeeper-server-start.bat ..\..\config\zookeeper.properties

@@ -12,3 +12,20 @@ Kalfka topic -> Kafka consumer -> deserialize to java DTO/POJO
 TODO:
 Kalfka topic -> Kafka stream enrich -> another Kafka topic
 java DTO/POJO -> Solr Document -> Solr (via http. Need a running local Solr server)
+
+We must use Kafka Connect to import/export data between Kafka and other sources (File, DB, Solr).
+Kafka provides this service out of the box (i.e. kafka-connect command line).
+If we want to use Kafka Connect in programs, we need to write our own Connector (extends Kafka Connector)
+or use a 3rd party library (ex. https://doc.akka.io/docs/alpakka/0.18/solr.html)
+
+Source is where data is coming from (i.e. Kafka)
+Sink is where data is going to (i.e. Solr)
+The data can be of 3 forms:
+- Solr documents
+- Java objects (aka Beans)
+- Solrsink.typed (auto-bind)
+
+Our example uses Beans.
+
+
+

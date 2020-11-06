@@ -15,6 +15,7 @@ kafka-topics.bat --create \
     --partitions 1 \
     --topic streams-plaintext-input
 kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
+
 [create a kafka topic "streams-wordcount-output"]
 kafka-topics.bat --create \
     --bootstrap-server localhost:9092 \
@@ -51,18 +52,69 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
     --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
     --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
 
-kafka-console-consumer.bat --bootstrap-server localhost:9092 ^
-    --topic streams-wordcount-output ^
-    --from-beginning ^
-    --formatter kafka.tools.DefaultMessageFormatter ^
-    --property print.key=true ^
-    --property print.value=true ^ 
-    --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer ^
-    --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
+[same as above but on 1 line]
+kafka-console-consumer.bat --bootstrap-server localhost:9092  --from-beginning --formatter kafka.tools.DefaultMessageFormatter --property print.key=true --property print.value=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer  --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer --topic streams-wordcount-output
+[no de/serialize version]
+kafka-console-consumer.bat --bootstrap-server localhost:9092  --from-beginning --formatter kafka.tools.DefaultMessageFormatter --property print.key=true --property print.value=true --topic connect-test
 
-kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic streams-wordcount-output --from-beginning --formatter kafka.tools.DefaultMessageFormatter --property print.key=true --property print.value=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer  --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
 
-[connector (file-to-file)]
+[connector file-to-file - works with lots of warnings]
+[guideline: requires 3 params: worker config, source config, and sink config]
 connect-standalone.bat ..\..\config\connect-standalone.properties ..\..\config\connect-file-source.properties ..\..\config\connect-file-sink.properties
 
-[connector (file-to-solr)]
+[actual test command]
+bin\windows\connect-standalone.bat config\01-connect-standalone-worker.properties config\02-connect-file-source.properties config\03-connect-file-sink.properties
+[necessary files, topic=connect-test]
+
+[01-connect-standalone-worker.properties]
+bootstrap.servers=localhost:9092
+key.converter=org.apache.kafka.connect.json.JsonConverter
+value.converter=org.apache.kafka.connect.json.JsonConverter
+# 10/20/20 - Set both to false. Must set key/value.converter (above)
+key.converter.schemas.enable=false
+value.converter.schemas.enable=false
+offset.storage.file.filename=/tmp/connect.offsets
+offset.flush.interval.ms=10000
+plugin.path=/Software/Kafka/25/libs
+
+[02-connect-file-source.properties]
+name=local-file-source
+connector.class=FileStreamSource
+tasks.max=1
+file=connect-test-data-json.txt
+topic=connect-test
+
+[03-connect-file-sink.properties]
+name=local-file-sink
+connector.class=FileStreamSink
+tasks.max=1
+file=test.sink.txt
+topics=connect-test
+
+
+[Input source file: connect-test-data-json.txt]
+{
+  "name" : "anh",
+  "age" : 22,
+  "is_rich" : false
+}
+
+[Input source file: connect-test-data.txt]
+line 1
+line 2
+line 3
+
+NOTE about connect-test-data.txt:
+- key/value converter org.apache.kafka.connect.json.JsonConverter also show lots of warning messages but WORKED.
+- key/value converter org.apache.kafka.connect.storage.StringConverter does NOT WORK.
+NOTE about file-to-file:
+- if you cat or echo more data into the input/source file, the worker connector immediately read the new data (from offset) and write to output/sink file.
+- the reason behind it is reading a log file and save new messages.
+
+[(connector file-to-solr)]
+cd D:\Software\Kafka\26, check connect-test-data-json.txt is there.
+
+connect-standalone.bat config\04-bkworker.properties config\02-connect-file-source.properties config\05-bkSolrSinkConnector.properties
+
+
+[(connector stream to file)]

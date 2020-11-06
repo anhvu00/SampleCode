@@ -1,5 +1,7 @@
 package com.kyron.kafka.dto;
 
+import org.apache.solr.client.solrj.beans.Field;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 // this class holds a json message
@@ -7,10 +9,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class JsonMessage {
 
 	@JsonProperty
+	@Field
 	String item;
 	@JsonProperty
+	@Field
 	double price;
 	@JsonProperty
+	@Field
 	boolean available;
 	
 	// constructors

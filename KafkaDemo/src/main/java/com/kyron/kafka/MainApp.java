@@ -30,6 +30,8 @@ import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +39,7 @@ import com.kyron.kafka.dto.JsonMessage;
 import com.kyron.kafka.dto.KafkaJsonDeserializer;
 import com.kyron.kafka.dto.KafkaJsonSerializer;
 import com.kyron.kafka.dto.User;
+import com.kyron.solr.SolrUtils;
 import com.kyron.util.MyFileUtils;
 
 /*
@@ -75,9 +78,18 @@ public class MainApp {
 		String jsonTopic = props.getProperty("TOPIC_JSON").trim();
 		runProducerJson(jsonTopic);
 		runConsumerJson(jsonTopic, 1);
+		
+		// connect to solr
+		String solrUrl = props.getProperty("solr.url");
+//		runConnector(jsonTopic, solrUrl);
 
-//		runStreamPipe();
+		runStreamPipe(demoTopic);
 		System.out.println("done");
+	}
+	
+	static void runConnector(String kafkaTopic, String solrUrl) {
+		SolrUtils su = new SolrUtils(JsonMessage.class, "demo.properties");
+		System.out.println("connector not implemented yet...");
 	}
 
 	/*
@@ -88,7 +100,7 @@ public class MainApp {
 	static void runProducerJson(String topic) {
 
 		// create a DTO
-		JsonMessage jmsg = new JsonMessage("coke", 2.45, true);
+		JsonMessage jmsg = new JsonMessage("fries", 3.25, true);
 
 		// create a producer
 		Properties props = new Properties();
@@ -268,7 +280,7 @@ public class MainApp {
 	/*
 	 * ? this doesn't do anything. why?
 	 */
-	static void runStreamPipe() {
+	static void runStreamPipe(String fromTopic) {
 		Properties props = new Properties();
 		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-pipe");
 		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -276,12 +288,12 @@ public class MainApp {
 		props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
 		final StreamsBuilder builder = new StreamsBuilder();
-		KStream<String, String> source = builder.stream(PLAINTEXT_TOPIC);
+		KStream<String, String> source = builder.stream(fromTopic);
 		// source.to(OUTPUT_STREAM);
 		source.flatMapValues(value -> Arrays.asList(value.toLowerCase(Locale.getDefault()).split("\\W+")))
 				.groupBy((key, value) -> value)
 				.count(Materialized.<String, Long, KeyValueStore<Bytes, byte[]>>as("counts-store")).toStream()
-				.to("streams-wordcount-output", Produced.with(Serdes.String(), Serdes.Long()));
+				.to("pipe-output", Produced.with(Serdes.String(), Serdes.Long()));
 		final Topology topology = builder.build();
 		final KafkaStreams streams = new KafkaStreams(topology, props);
 		final CountDownLatch latch = new CountDownLatch(1);
