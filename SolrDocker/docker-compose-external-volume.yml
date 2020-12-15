@@ -1,0 +1,24 @@
+# Use docker-compose version 3
+# Create a standalone solr v8.6 server
+# Create host volume for solr
+# 
+# see https://github.com/docker-solr/docker-solr
+# and https://github.com/docker-solr/docker-solr/blob/master/Docker-FAQ.md
+# Run docker-compose up -d
+# Connect to it: docker exec -it <container id> /bin/bash, mkdir /var/tmp/mydata
+# Download sample data: wget -O mydata/books.csv https://raw.githubusercontent.com/apache/lucene-solr/master/solr/example/exampledocs/books.csv
+# Load using solr post: post -c venom_docs mydata/books.csv
+#
+version: '3.2'
+services:
+  solr:
+    image: solr:8.6
+    ports:
+     - "8983:8983"
+    volumes:
+      - /tmp/venom_docs:/var/solr/data
+    command:
+      - solr-precreate
+      - venom_docs
+volumes:
+  data:

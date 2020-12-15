@@ -1,0 +1,12 @@
+# ./data/solr should contain the config and schema definitions, as well as search indexes
+# venom_docs is a core that is created on startup
+venom-solr:
+  image: solr
+  ports:
+      - "8983:8983"
+  volumes:
+      - ./data/solr:/opt/solr/server/solr/mycores
+  entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - venom_docs
