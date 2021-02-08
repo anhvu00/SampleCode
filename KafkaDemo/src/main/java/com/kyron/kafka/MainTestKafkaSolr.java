@@ -14,6 +14,8 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kyron.kafka.dto.JsonMessage;
 import com.kyron.kafka.dto.KafkaJsonDeserializer;
 import com.kyron.kafka.dto.KafkaJsonSerializer;
@@ -32,24 +34,56 @@ public class MainTestKafkaSolr {
 	public static void main(String[] args) {
 
 		String topic = "demo";
-		// Write to Kafka topic as json
-//		insertToKafka(topic);
-		// Read from Kafka topic, deserialized to DTO
-		//readKafka(topic, 10);
-		// Write DTO to Solr
-//		kafkaToSolr(topic);
-		
-		// quick test kafkaUtils
-		testKafkaUtils();
-
+//		testKafkaJsonToSolr(topic);
+		testKafkaStringToSolr(topic);
 	}
+	
+	/*
+	 * Create a DTO with data
+	 * Use Kafka Producer to insert the DTO to topic as Json
+	 * Use Kafka Consumer to read Json into a DTO
+	 * Use SolrUtil to save the DTO to Solr
+	 */
+	public static void testKafkaJsonToSolr(String topic) {
+		// create a DTO
+		JsonMessage jmsg = new JsonMessage("properties3", 3.99, true);
+		KafkaUtils ku = new KafkaUtils(JsonMessage.class, "demo.properties");
+		ku.insertJson(jmsg, topic);
+		// save to solr
+		ku.kafkaJsonToSolr(topic);	
+	}
+	
+	/*
+	 * Create a Json string
+	 * Use Kafka Producer to insert the string to topic
+	 * Use Kafka Consumer to read the string
+	 * Use SolrUtil to save the string to Solr
+	 */
+	public static void testKafkaStringToSolr(String topic) {
+		// Create a Json String
+		JsonMessage jmsg = new JsonMessage("properties4", 4.99, true);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			String jsonString = mapper.writeValueAsString(jmsg);
+			KafkaUtils ku = new KafkaUtils(String.class, "demo.properties");
+			// insert string to kafka topic
+			ku.insertString(jsonString, topic);
+			// read and save string to solr
+			ku.kafkaStringToSolr(topic);
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 
 	/*
 	 * Create a DTO, Create a Producer with a Json Serializer specifically built for
 	 * that DTO, Use the Producer to send in the DTO. The message key is hard-coded
 	 * here.
 	 */
-	public static void insertToKafka(String topic) {
+	public static void insertJsonToKafka(String topic) {
 		// create a DTO
 		JsonMessage jmsg = new JsonMessage("burger", 5.85, true);
 
@@ -147,15 +181,5 @@ public class MainTestKafkaSolr {
 		consumer.close();
 	}
 	
-	// worked 11/4/20
-	public static void testKafkaUtils() {
-		// create a DTO
-		JsonMessage jmsg = new JsonMessage("properties1", 0.99, true);
-		KafkaUtils ku = new KafkaUtils(JsonMessage.class, "demo.properties");
-		ku.insertJson(jmsg, "demo");
-		// save to solr
-		ku.kafkaToSolrJson("demo");
-		
-	}
 
 }

@@ -14,12 +14,17 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.request.ContentStreamUpdateRequest;
+import org.apache.solr.common.util.ContentStream;
+import org.apache.solr.common.util.ContentStreamBase;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
+import com.kyron.kafka.dto.JsonMessage;
 import com.kyron.kafka.dto.KafkaJsonDeserializer;
-import com.kyron.kafka.dto.KafkaJsonSerializer;
 import com.kyron.solr.SolrUtils;
 
 /*
@@ -65,10 +70,28 @@ public class KafkaUtils<T> {
 		System.out.println("message sent to topic " + topic);
 	}
 	
-	/* 
-	 * Consume json from kafka topic and insert to Solr
+	/*
+	 * Insert a string (json as string) to topic
 	 */
-	public void kafkaToSolrJson(String topic) {
+	public<T> void insertString(T object, String topic) {
+		
+		// Set properties for our Producer
+		Properties props = new Properties();
+		props.setProperty("bootstrap.servers", serverProp.getProperty("kafka.broker"));
+		props.setProperty("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+		props.setProperty("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+		Producer<String, T> producer = new KafkaProducer<>(props); 
+
+		// Send a message with the POJO/DTO object (not json)
+		producer.send(new ProducerRecord<>(topic, "MSGKEY", object));
+		producer.close();
+		System.out.println("message sent to topic " + topic);
+	}
+	
+	/* 
+	 * Consum json from kafka topic and insert to Solr
+	 */
+	public void kafkaJsonToSolr(String topic) {
 		
 		// Set properties for our Consumer
 		Properties props = new Properties();
@@ -94,6 +117,66 @@ public class KafkaUtils<T> {
 					T msg = message.value();
 					System.out.println("Message=" + msg.toString());
 					su.insert(msg);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		consumer.close();		
+	}
+	
+	/* 
+	 * Consume String (json) from kafka topic and insert to Solr
+	 */
+	public void kafkaStringToSolr(String topic) {
+		
+		// Set properties for our Consumer
+		Properties props = new Properties();
+		props.setProperty("group.id", "test-consume");
+		props.setProperty("bootstrap.servers", serverProp.getProperty("kafka.broker"));
+		props.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+		props.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+
+		// T is JsonMessage, DATA_TYPE is JsonMessage.class = purely syntax
+		Consumer<String, T> consumer = new KafkaConsumer(props);
+		consumer.subscribe(Collections.singletonList(topic));
+		try {
+			// Collect all new messages every 1 second
+			ConsumerRecords<String, T> messages = consumer.poll(Duration.ofSeconds(1));
+			if (messages != null && messages.count() > 0) {
+				// Create solr util for this DTO
+				SolrUtils su = new SolrUtils(DATA_TYPE, this.serverPropFileName);
+				for (ConsumerRecord<String, T> message : messages) {
+					// this is how venom convert message to jsonobject
+					JSONParser parser = new JSONParser();
+					Object obj = parser.parse((String) message.value());
+					if (obj instanceof JSONArray) {
+						System.out.println("array json is not implemented yet");
+					} else {
+						JSONObject jsonObj = (JSONObject) obj;
+						String item = (String) jsonObj.get("item");
+						double price = (double) jsonObj.get("price");
+						boolean avail = (boolean) jsonObj.get("available");
+						// create a new DTO with this json object
+						// NOTE: THIS DEFEATS THE GENERIC PURPOSE OF THIS UTIL
+						JsonMessage dto = new JsonMessage(item, price, avail);
+						su.insert(dto);
+						System.out.println("inserted to solr");
+					}
+					
+					// message.value() is JsonMessage type, send it to solr					
+//					T msg = message.value();
+//					System.out.println("Message=" + msg.toString());
+//					su.insert(msg);
+					
+					/* example 4 - ran but no record
+					final ContentStreamUpdateRequest csr = new ContentStreamUpdateRequest(su.getSolrUrl());
+					final ContentStream cs = new ContentStreamBase.StringStream((String) msg);
+					csr.addContentStream(cs);
+					System.out.println("send string to solr");
+					*/
+					
+					
 				}
 			}
 		} catch (Exception e) {

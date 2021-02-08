@@ -30,6 +30,7 @@ public class SolrUtils<T> {
 	private HttpSolrClient solrClient;
 	private Properties prop;
 	private ArrayList<String> searchFields;
+	private String solrUrl;
 	
 	// constructor sets the generic data type of the document/input/output data object
 	public SolrUtils(Class<T> dataType, String propFileName) {
@@ -39,7 +40,7 @@ public class SolrUtils<T> {
 
 		// read properties for Solr server info
 		prop = getProperties(propFileName);
-		String solrUrl = prop.getProperty("solr.url");
+		this.solrUrl = prop.getProperty("solr.url");
 		solrClient = createSolrClient(solrUrl);
 		searchFields = new ArrayList<String>();
 	}
@@ -47,7 +48,7 @@ public class SolrUtils<T> {
 	// generic add data to the Solr collection where data can be any java objects
 	public <T> void insert(T object) {
 		try {
-			UpdateResponse response = solrClient.addBean(object);
+			UpdateResponse response = solrClient.addBean(object); 
 			solrClient.commit();
 		} catch (IOException e) {
 			LOG.error(e.getMessage());
@@ -143,6 +144,14 @@ public class SolrUtils<T> {
 
 	public void setSearchFields(ArrayList<String> searchFields) {
 		this.searchFields = searchFields;
+	}
+
+	public String getSolrUrl() {
+		return solrUrl;
+	}
+
+	public void setSolrUrl(String solrUrl) {
+		this.solrUrl = solrUrl;
 	}
 
 }
