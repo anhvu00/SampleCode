@@ -1,0 +1,2 @@
+2020-11-12 23:03:48.772 ERROR [main] [com.kyron.kafka.dto.KafkaJsonDeserializer] [deserialize] [com.kyron.kafka.dto.KafkaJsonDeserializer.deserialize(KafkaJsonDeserializer.java:34)] - Cannot deserialize instance of `java.lang.String` out of START_OBJECT token
+ at [Source: (byte[])"{"item":"properties4","price":4.99,"available":true}"; line: 1, column: 1]
