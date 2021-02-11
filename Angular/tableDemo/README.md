@@ -5,7 +5,7 @@ PURPOSE:
 
 DESCRIPTION:
 - This application shows a history of stock trades. The end goal is to help me keep track of gain/loss and figure out if/when to buy the stock again.
-- There are 2 datasources: one is a hard coded array of data. The other is a HTTP REST call to a Java/mysql server (see ...)
+- There are 2 datasources: one is a hard coded array of data. The other is a HTTP REST call to a Java/mysql server (see SampleCode/Springboot/TradeServer)
 
 TODO:
 - Find/build nested table or master-detail table. Most example online don't work (agtable, ngx-nested-table, etc.)
