@@ -1,0 +1,39 @@
+table {
+    width: 100%;
+  }
+  
+  tr.detail-row {
+    height: 0;
+  }
+  
+  tr.element-row:not(.flag-expanded-row):hover {
+    background: rgb(37, 192, 96);
+  }
+  
+  tr.element-row:not(.flag-expanded-row):active {
+    background: #d12349;
+  }
+  
+  .element-row td {
+    border-bottom-width: 0;
+  }
+  
+  .element-detail {
+    overflow: hidden;
+    display: flex;
+  }
+  
+  .column-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+  }
+  
+  .column-notes {
+    padding: 16px;
+  }
+  
+  .column-notes-attribution {
+    opacity: 0.5;
+  }
+  
