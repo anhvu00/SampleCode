@@ -1,6 +1,7 @@
 package com.kyron.server;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,5 +50,19 @@ public class MainController {
 		System.out.println("fetch all data..." + cnt++);
 		return queryRepository.findByNameNative();
 	}
+	
+	@CrossOrigin
+	@GetMapping(path="/user1")
+	public @ResponseBody User getUser1() {
+		System.out.println("fetch user 1..." + cnt++);
+		Optional<User> opt = userRepository.findById(1);
+		if (opt.isPresent()) {
+			User u = opt.get();
+			return u;
+		} else {
+			return null;
+		}
+	}
+	
 	
 }
