@@ -1,0 +1,31 @@
+<!--dash.component.html-->
+<div color="primary" class="grid-container">
+  <mat-grid-list cols="{{ ( cardLayout | async )?.columns }}" rowHeight="200px">
+    <!--Mini Cards-->
+    <mat-grid-tile *ngFor="let i of [1, 2, 3, 4]" [colspan]="( cardLayout | async )?.miniCard.cols"
+      [rowspan]="( cardLayout | async )?.miniCard.rows">
+      <app-card title="Card {{i}}">
+        <div>Mini Card Content Here</div>
+      </app-card>
+      <!--<app-mini-card [title]="mc.title" [textValue]="mc.textValue" [value]="mc.value" [color]="mc.color" [percentValue]="mc.percentValue"></app-mini-card> -->
+    </mat-grid-tile>
+    <!--Charts-->
+    <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
+      <app-card title="Card 5">
+        <app-cardstatic></app-cardstatic>
+      </app-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="( cardLayout | async )?.chart.cols" [rowspan]="( cardLayout | async )?.chart.rows">
+      <app-card title="Card 6">
+        <div>Card 6 content here</div>
+      </app-card>
+    </mat-grid-tile>
+
+    <!--Table-->
+    <mat-grid-tile [colspan]="( cardLayout | async )?.table.cols" [rowspan]="( cardLayout | async )?.table.rows">
+      <app-card title="Card 7">
+        <div>Table Content Here</div>
+      </app-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

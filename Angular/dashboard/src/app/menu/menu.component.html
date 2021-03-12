@@ -1,0 +1,27 @@
+<button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <mat-icon>more_vert</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+    <button mat-menu-item>
+        <mat-icon>dialpad</mat-icon>
+        <span>Redial</span>
+    </button>
+    <button mat-menu-item disabled>
+        <mat-icon>voicemail</mat-icon>
+        <span>Voice mail (disabled)</span>
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="submenu">
+        <mat-icon>notifications_off</mat-icon>
+        <span>notifyOff (submenu)</span>
+    </button>
+    <mat-menu #submenu="matMenu">
+        <button mat-menu-item>
+            <mat-icon>alarm</mat-icon>
+            <span>subItem1</span>
+        </button>
+        <button mat-menu-item>
+            <mat-icon>anchor</mat-icon>
+            <span>subItem2</span>
+        </button>
+    </mat-menu>
+</mat-menu>

@@ -1,0 +1,6 @@
+img {
+    max-width:30%;
+    max-height:30%;
+    object-fit: cover; 
+    object-position: center; /* this centers and crops the image so that it doesn't break the aspect ratio */
+  }

@@ -1,0 +1,43 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button class="example-icon" [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <mat-button mat-menu-item [routerLink]="''">
+            <mat-icon>home</mat-icon>
+            <span>Home Page</span>
+        </mat-button>
+        <mat-button mat-menu-item [routerLink]="'dashboard'">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+        </mat-button>
+        <button mat-menu-item [matMenuTriggerFor]="submenu">
+            <mat-icon>notifications_off</mat-icon>
+            <span>notifyOff (submenu)</span>
+        </button>
+        <mat-menu #submenu="matMenu">
+            <button mat-menu-item>
+                <mat-icon>alarm</mat-icon>
+                <span>subItem1</span>
+            </button>
+            <button mat-menu-item>
+                <mat-icon>anchor</mat-icon>
+                <span>subItem2</span>
+            </button>
+        </mat-menu>
+    </mat-menu>
+    <span>My Toolbar</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-icon-button>
+        <mat-icon>help</mat-icon>
+    </button> 
+    <button mat-icon-button>
+        <mat-icon>mail</mat-icon>
+    </button> 
+    <button mat-icon-button>
+        <mat-icon>settings</mat-icon>
+    </button> 
+    <button mat-icon-button>
+        <mat-icon>account_circle</mat-icon>
+    </button> 
+</mat-toolbar>

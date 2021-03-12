@@ -1,0 +1,14 @@
+header {
+    background-color: rgb(63, 37, 211);
+    padding: 10px;
+    text-align: center;
+    font-size: 35px;
+    color: white;
+  }
+  footer {
+    background-color: rgb(126, 78, 214);
+    padding: 5px;
+    text-align: right;
+    font-size: 15px;
+    color: white;
+  }
