@@ -20,3 +20,9 @@ scrape_configs:
       - targets: ['HOST:PORT']
 - Configure Grafana to display those metrics (i.e. new datasource)
 
+3/29/21 
+- Containerize & deploy on local kube cluster
+https://www.oreilly.com/content/how-to-manage-docker-containers-in-kubernetes-with-java/
+- Wire everything together (myapp, Prometheus, Grafana). How helm chart configure Prometheus scrape target here?
+The real kirby work is more involved: Gitlab pipeline
+
