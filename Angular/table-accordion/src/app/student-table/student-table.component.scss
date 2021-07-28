@@ -1,0 +1,33 @@
+$cell-padding: 8px;
+table.tid-table {
+    width: 100%;
+    tr {
+      &.student-detail-row {
+        > td {
+          padding: 0;
+          border: 0;
+          > div {
+            width: 100%;
+            box-sizing: border-box;
+            max-height: 0;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+            overflow: hidden;
+            > div {
+              padding: $cell-padding;
+            }
+          }
+        }
+        &.show  > td > div {
+          max-height: 1000px;
+          transition: max-height 1s ease-in-out;
+        }
+        &.expanded {
+            max-height: 1000px;
+            transition: max-height 1s ease-in-out;
+          }
+      }
+      &.tid-even {
+      background-color: #e2e2e2;
+    }
+    }
+  }

@@ -1,0 +1,21 @@
+<table class="tid-table">
+    <ng-container *ngFor="let row of rows; let index=index; let even=even">
+      <tr class="tid-data-row"
+        [ngClass]="{'tid-even': even}">
+      <td>
+        Row {{index}} - {{row.desc}} 
+      </td>
+      <td>
+          <button (click)="row.showDetail = !row.showDetail">Toggle me</button>
+      </td>
+    </tr>
+    <tr class="tid-detail-row"
+        [ngClass]="{'show': row.showDetail}">
+      <td colspan="2">
+        <div>
+          <div>   This is row {{index}} detail</div>
+          </div>
+      </td>
+    </tr>
+    </ng-container>
+  </table>

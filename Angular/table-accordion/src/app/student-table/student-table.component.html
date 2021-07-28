@@ -1,0 +1,52 @@
+<a mat-raised-button href="javascript:void()" (click)="toggleTableRows()" color="primary">Toggle Rows</a>
+<table mat-table [dataSource]="dataStudentsList" multiTemplateDataRows class="tid-table">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="age">
+      <th mat-header-cell *matHeaderCellDef> Age </th>
+      <td mat-cell *matCellDef="let element"> {{element.age}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef> Address </th>
+      <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let element">
+        <a mat-button href="javascript:void()">View
+          Subjects</a>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedStudentsColumnsList.length">
+  
+          <div class="row student-element-detail" [@detailExpand]="element.isExpanded ? 'expanded' : 'collapsed'">
+            <mat-list>
+              <div mat-subheader>Subjects of {{element.name}}</div>
+              <mat-list-item *ngFor="let subject of element.subjects">
+                <div mat-line>{{subject.name}}</div>
+                <div mat-line> {{subject.type}} | Grade: {{subject.grade}}</div>
+              </mat-list-item>
+            </mat-list>
+          </div>
+  
+        </td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedStudentsColumnsList;"></tr>
+    <tr mat-row *matRowDef="let element; columns: displayedStudentsColumnsList;" class="tid-data-row"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="student-detail-row"></tr>
+
+  </table>
