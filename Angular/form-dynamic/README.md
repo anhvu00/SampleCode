@@ -1,8 +1,9 @@
 
 Example from https://danielk.tech/home/how-to-build-a-dynamic-angular-form
 It is modified to work with Angular 11/12. 
+
 Important: do not enable strict type when create the project (i.e. ng new <proj>)
-because it uses assignments of generic type (i.e. class<T>)
+because it uses assignments of generic type (i.e. class&ltT&gt)
 
 Components:
 - Definitions of all the fields (textbox, checkbox, combobox, radio, and validation)
