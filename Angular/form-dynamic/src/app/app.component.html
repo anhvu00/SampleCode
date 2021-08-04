@@ -1,0 +1,24 @@
+<h1>{{title}}</h1>
+<h2>Notes</h2>
+<p>Example from https://danielk.tech/home/how-to-build-a-dynamic-angular-form.
+    It is modified to work with Angular 11/12.</p>
+<p>Important: do not enable strict type when create the project (i.e. ng new [proj])
+    because it uses assignments of generic type (i.e. class(T) </p>
+
+<h3>Components</h3>
+<p>- Definitions of all the fields (textbox, checkbox, combobox, radio, and validation)</p>
+<p>- A dynamic form which takes the form fields, call a service to create a FormGroup,
+    then display the FormGroup with a submit button.</p>
+<p>- A Service to do 2 things:
+    A. Create the form fields with static test data. In production, it should make a REST call
+    and populate the form fields array.
+    B. Transform the form fields array to a FormGroup</p>
+
+<h3>TODO</h3>
+<p>- Add scss style. Need a design theme like bootstrap or something.</p>
+<p>- Add retrieving data from REST calls</p>
+<p>- Learn how it validates email (Angular built-in feature?)</p>
+<p>- More test data (i.e. more realistic form fields)</p>
+
+<app-dynamic-form [formFields]="formFields | async "></app-dynamic-form>
+<router-outlet></router-outlet>
