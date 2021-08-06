@@ -1,0 +1,11 @@
+<div>
+    <h3>NOTE:</h3>
+    <p>Click the below button to toggle the second tab. It can be done without the button by setting the boolean variable</p>
+</div>
+<button type="button" md-button class="btn1" (click)="showhideFilter2();">{{buttonTitle}}</button>
+
+<mat-tab-group mat-align-tabs="left" backgroundColor="accent">
+    <mat-tab label="Filter1" >Filter 1 Content</mat-tab>
+    <mat-tab label="Filter2" *ngIf="visible">Filter 2 Content</mat-tab>
+    <mat-tab label="Filter3">Filter 3 Content</mat-tab>
+</mat-tab-group>
