@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h4 class="modal-title">Information: {{ country.name }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="card country-border">
+        <img class="card-img-top" [src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag"
+            alt="Card image cap">
+        <div class="card-body">
+            <p class="card-text"><b>Name : </b>{{ country.name }}</p>
+            <p class="card-text"><b>Area : </b>{{ country.area }}</p>
+            <p class="card-title"><b>Population : </b>{{ country.population }}</p>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>
