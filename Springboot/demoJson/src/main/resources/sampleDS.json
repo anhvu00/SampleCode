@@ -1,0 +1,45 @@
+  {
+	"id": "1295841",
+	"uri": "",
+	"name": "1295071: GLIDR IFS4 Ingest File System Aja Test4",
+	"description": "GLIDR Ingest File System Aja Test4",
+	"updateFrequency": "300000",
+	"imageUri": "http://ndrhel57app02/icons/database.png",
+	"state": "REQUESTED",
+	"queryConfiguration": {
+		"id": "1295840",
+		"fork": true,
+		"dateFormat": "",
+		"workflowName": "none",
+		"requestParameters": [],
+		"responseParameters": []
+	},
+	"elementHandlingConfiguration": {
+		"id": "1295839",
+		"splittingParameters": []
+	},
+	"latlongdefault": "0,0",
+	"intelType": "OSINT",
+	"cocoms": [
+		{
+			"id": "4",
+			"name": "USNORTHCOM"
+		}
+	],
+	"attributes": [
+		{
+			"id": "1295842",
+			"storedName": "doi",
+			"regex": "(?si)catapult.inserted.rss:PubDate: ([0-9]*/[0-9]*/[0-9]*)\n",
+			"priority": 1
+		},
+		{
+			"id": "1295843",
+			"storedName": "title",
+			"regex": "(?si)TITLE:([^\"\\r\\n]*)\n",
+			"priority": 1
+		}
+	],
+	"reportingType": "FINISHED",
+	"staleThreshold": "3000000"
+}

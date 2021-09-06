@@ -1,0 +1,22 @@
+{
+	"sourceId": 1234,
+	"sourceUri": "https://somehost.com",
+	"sourceName": "test source",
+	"sourceDescription": "just a test",
+	"state": "APPROVED",
+	"updateFrequency": 1,
+	"staleThreshold": 1,
+	"imageUri": "https://somehost.com/test.jpg",
+	"workflowName": "Kettle/RSSParse",
+	"isLegacy": "true",
+	"category": "RSS",
+	"attributes": [
+		{
+			"id": "1295842",
+			"storedName": "doi",
+			"regex": "(?si)catapult.inserted.rss:PubDate: ([0-9]*/[0-9]*/[0-9]*)\n",
+			"priority": 1
+		}
+	]
+
+}
