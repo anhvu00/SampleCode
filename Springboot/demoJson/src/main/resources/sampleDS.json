@@ -16,7 +16,12 @@
 	},
 	"elementHandlingConfiguration": {
 		"id": "1295839",
-		"splittingParameters": []
+		"splittingParameters": [
+			{
+				"name": "splitter1",
+				"value": "(?m)^(BT|BLAH|FOO)$"
+			}
+		]
 	},
 	"latlongdefault": "0,0",
 	"intelType": "OSINT",

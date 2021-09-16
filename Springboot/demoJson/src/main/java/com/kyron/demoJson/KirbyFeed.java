@@ -2,7 +2,7 @@ package com.kyron.demoJson;
 
 import org.springframework.context.annotation.Configuration;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,27 @@ class SourceAttributes {
 }
 
 @Getter @Setter @NoArgsConstructor
+class ProcConfig {
+	private String strategy;
+	private IngestParam[] params;
+}
+
+@Getter @Setter @NoArgsConstructor
+class Filter {
+	public String description;
+	public IngestParam[] params;
+}
+
+@Getter @Setter @NoArgsConstructor
+class FilterConfig {
+	Filter filenameFilter;
+	Filter pubDateFilter;
+	Filter contentFilter;	
+}
+
+@Getter @Setter @NoArgsConstructor
 @Configuration
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class KirbyFeed {
 	
 	private int sourceId;
@@ -30,10 +50,13 @@ public class KirbyFeed {
 	private String staleThreshold;
 	private String imageUri;
 	private String workflowName;
-	private String isLegacy;
+	private boolean isLegacy;
 	private String category; // RSS, XML, etc.
 	private String optionalFlag; 
 	private SourceAttributes[] attributes;
+	private ProcConfig fetchConfig;
+	private ProcConfig parseConfig;
+	private FilterConfig filterConfig;  // contain 1 - 3 different filters (fileName, content, date)
   
 	
 }

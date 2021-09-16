@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class MainController {
 
 	@Autowired
-	private KirbyFeed kirbyDto;
+	private KirbyFeed kirbyFeed;
 
 	
 	@GetMapping("/hello")
@@ -32,7 +32,6 @@ public class MainController {
 		return fileToKirbyDTO("kirby.json");
 	}
 	
-	// helper functions should be in service.
 	
 	public String fileToKirbyDTO(String fileName) {
 		String retval = "";
@@ -44,9 +43,9 @@ public class MainController {
 			ObjectMapper objectMapper = new ObjectMapper();
 			
 			//convert json string to object
-			kirbyDto = objectMapper.readValue(jsonData, KirbyFeed.class);
+			kirbyFeed = objectMapper.readValue(jsonData, KirbyFeed.class);
 			
-			String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(kirbyDto);
+			String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(kirbyFeed);
 			System.out.println(json);
 			
 			retval = json;

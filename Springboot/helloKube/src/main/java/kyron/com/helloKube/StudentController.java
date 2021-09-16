@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,9 +20,16 @@ public class StudentController {
 	@Value("${user.myvar1:default-value}")
 	private String userMyVar1;
 	
+	// smoke test to see if server is up
 	@GetMapping("/hello")
 	public String hello(){
 		return "Hello world";
+	}
+	
+	// test @PathVariable
+	@GetMapping("/get/{id}")
+	public String getOne( @PathVariable String id) {
+		return ("@PathVariable id = " + id);
 	}
 	
 	@GetMapping("/greeting")

@@ -1,0 +1,51 @@
+[
+	{
+		"operation": "shift",
+		"spec": {
+			"id": "sourceId",
+			"name": "sourceName",
+			"description": "sourceDescription",
+			"state": "state",
+			"updateFrequency": "updateFrequency",
+			"staleThreshold": "staleThreshold",
+			"imageUri": "imageUri",
+			"queryConfiguration": {
+				"workflowName": "workflowName"
+			},
+			"elementHandlingConfiguration": "elementHandlingConfiguration",
+			"attributes": "attributes"
+		}
+	},
+	{
+		"operation": "default",
+		"spec": {
+			"isLegacy": true,
+			"category": "RSS",
+			"filterConfig": {
+				"filenameFilter": {
+					"description": "Filters the resource from the workflow by applying a REGEX to its filename",
+					"params": []
+				}
+			},
+			"fetchConfig": {
+				"strategy": "simpleHttpStrategy",
+				"params": []
+			},
+			"parseConfig": {
+				"strategy": "simpleParseStrategy",
+				"params": []
+			},
+			"publishConfig": {
+				"strategy": "PublishStrategy",
+				"params": []
+			},
+			"cleanupConfig": {
+				"strategy": "CleanupStrategy",
+				"params": []
+			},
+			"miscellaneousConfig": {
+				"params": []
+			}
+		}
+	}
+]

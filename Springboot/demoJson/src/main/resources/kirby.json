@@ -17,6 +17,19 @@
 			"regex": "(?si)catapult.inserted.rss:PubDate: ([0-9]*/[0-9]*/[0-9]*)\n",
 			"priority": 1
 		}
-	]
-
+	],
+	"fetchConfig": {
+		"strategy": "somestrategy",
+		"params": []
+	},
+	"parseConfig": {
+		"strategy": "somestrategy",
+		"params": []
+	},
+	"filterConfig": {
+		"filenameFilter": {
+			"description": "Filters the resource from the workflow by applying a REGEX to its filename",
+			"params": []
+		}
+	}
 }
