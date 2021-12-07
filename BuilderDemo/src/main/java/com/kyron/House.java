@@ -1,5 +1,13 @@
 package com.kyron;
 
+/**
+ * The Builder is useful when:
+ * 1. Require many parts and/or the logic of getting the parts are complex
+ * 2. Construction order is important
+ * 
+ * @author anh
+ *
+ */
 public class House {
 
 	private String foundation;
