@@ -1,0 +1,17 @@
+4/11/22
+
+PURPOSE:
+
+Simple Springboot REST API (without thymeleaf to serve html pages) with endpoints returning String.
+It is used to test x509 certificate/SSL connectivity between Client/Server
+
+SETUP:
+
+- Use Spring Initializer to create project (java 11, springboot 2.6.6)
+- Create @RestController SimpleController with 1 endpoint /hello
+- Create self signed certs, put them in resources folder
+- Add them to application.properties (you can still access localhost:8443/hello but it is not secured)
+- Add springboot-starter-security to pom.xml (accessing the above url requires a login Admin/admin)
+- Add SecurityConfig.java
+- Add clientBob.crt, clientBob.key and rootCA.crt
+- curl "https://localhost:8443/hello" --cert clientBob.crt --key clientBob.key --cacert rootCA.crt
