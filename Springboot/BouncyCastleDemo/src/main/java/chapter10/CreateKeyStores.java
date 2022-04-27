@@ -16,37 +16,37 @@ public class CreateKeyStores extends BaseClass
     public static void main(String[] args)
         throws Exception
     {
-        X500PrivateCredential    rootCredential = BCSSLUtils.createRootCredential();
-        X500PrivateCredential    interCredential = BCSSLUtils.createIntermediateCredential(rootCredential.getPrivateKey(), rootCredential.getCertificate());
-        X500PrivateCredential    endCredential = BCSSLUtils.createEndEntityCredential(interCredential.getPrivateKey(), interCredential.getCertificate());
+        X500PrivateCredential    rootCredential = BC_SSLUtils.createRootCredential();
+        X500PrivateCredential    interCredential = BC_SSLUtils.createIntermediateCredential(rootCredential.getPrivateKey(), rootCredential.getCertificate());
+        X500PrivateCredential    endCredential = BC_SSLUtils.createEndEntityCredential(interCredential.getPrivateKey(), interCredential.getCertificate());
         
         // client credentials
         KeyStore keyStore = KeyStore.getInstance("PKCS12", "BC");
         
         keyStore.load(null, null);
         
-        keyStore.setKeyEntry(BCSSLUtils.CLIENT_NAME, endCredential.getPrivateKey(), BCSSLUtils.CLIENT_PASSWORD, 
+        keyStore.setKeyEntry(BC_SSLUtils.CLIENT_NAME, endCredential.getPrivateKey(), BC_SSLUtils.CLIENT_PASSWORD, 
                 new Certificate[] { endCredential.getCertificate(), interCredential.getCertificate(), rootCredential.getCertificate() });
         
-        keyStore.store(new FileOutputStream(BCSSLUtils.CLIENT_NAME + ".p12"), BCSSLUtils.CLIENT_PASSWORD);
+        keyStore.store(new FileOutputStream(BC_SSLUtils.CLIENT_NAME + ".p12"), BC_SSLUtils.CLIENT_PASSWORD);
         
         // trust store for client
         keyStore = KeyStore.getInstance("JKS");
         
         keyStore.load(null, null);
         
-        keyStore.setCertificateEntry(BCSSLUtils.SERVER_NAME, rootCredential.getCertificate());
+        keyStore.setCertificateEntry(BC_SSLUtils.SERVER_NAME, rootCredential.getCertificate());
         
-        keyStore.store(new FileOutputStream(BCSSLUtils.TRUST_STORE_NAME + ".jks"), BCSSLUtils.TRUST_STORE_PASSWORD);
+        keyStore.store(new FileOutputStream(BC_SSLUtils.TRUST_STORE_NAME + ".jks"), BC_SSLUtils.TRUST_STORE_PASSWORD);
         
         // server credentials
         keyStore = KeyStore.getInstance("JKS");
         
         keyStore.load(null, null);
         
-        keyStore.setKeyEntry(BCSSLUtils.SERVER_NAME, rootCredential.getPrivateKey(), BCSSLUtils.SERVER_PASSWORD,
+        keyStore.setKeyEntry(BC_SSLUtils.SERVER_NAME, rootCredential.getPrivateKey(), BC_SSLUtils.SERVER_PASSWORD,
                 new Certificate[] { rootCredential.getCertificate() });
         
-        keyStore.store(new FileOutputStream(BCSSLUtils.SERVER_NAME + ".jks"), BCSSLUtils.SERVER_PASSWORD);
+        keyStore.store(new FileOutputStream(BC_SSLUtils.SERVER_NAME + ".jks"), BC_SSLUtils.SERVER_PASSWORD);
     }
 }

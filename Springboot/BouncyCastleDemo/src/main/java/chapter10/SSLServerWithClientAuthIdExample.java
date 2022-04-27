@@ -48,15 +48,15 @@ public class SSLServerWithClientAuthIdExample extends SSLServerExample
 		KeyManagerFactory mgrFact = KeyManagerFactory.getInstance("SunX509");
 		KeyStore serverStore = KeyStore.getInstance("JKS");
 
-		serverStore.load(new FileInputStream("server.jks"), BCSSLUtils.SERVER_PASSWORD);
+		serverStore.load(new FileInputStream("server-1.jks"), BC_SSLUtils.SERVER_PASSWORD);
 
-		mgrFact.init(serverStore, BCSSLUtils.SERVER_PASSWORD);
+		mgrFact.init(serverStore, BC_SSLUtils.SERVER_PASSWORD);
 		
 		// set up a trust manager so we can recognize the server
 		TrustManagerFactory trustFact = TrustManagerFactory.getInstance("SunX509");
 		KeyStore            trustStore = KeyStore.getInstance("JKS");
 		
-		trustStore.load(new FileInputStream("trustStore.jks"), BCSSLUtils.TRUST_STORE_PASSWORD);
+		trustStore.load(new FileInputStream("trustStore-1.jks"), BC_SSLUtils.TRUST_STORE_PASSWORD);
 		
 		trustFact.init(trustStore);
 		
@@ -77,7 +77,7 @@ public class SSLServerWithClientAuthIdExample extends SSLServerExample
 
 		// create the server socket
         SSLServerSocketFactory fact = sslContext.getServerSocketFactory();
-        SSLServerSocket        sSock = (SSLServerSocket)fact.createServerSocket(BCSSLUtils.PORT_NO);
+        SSLServerSocket        sSock = (SSLServerSocket)fact.createServerSocket(BC_SSLUtils.PORT_NO);
     
         sSock.setNeedClientAuth(true);
         

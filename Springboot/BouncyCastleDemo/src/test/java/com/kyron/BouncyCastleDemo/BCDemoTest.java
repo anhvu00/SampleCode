@@ -1,7 +1,5 @@
 package com.kyron.BouncyCastleDemo;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.security.KeyPair;
@@ -19,9 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.util.ResourceUtils;
 
-import chapter10.BCSSLUtils;
+import chapter10.BC_SSLUtils;
 
 @SpringBootTest(classes = { DemoSSLConfig.class })
 @TestPropertySource("classpath:application.properties")
@@ -42,12 +39,12 @@ class BCDemoTest {
 	@Test
 	void createRootAndEntityCredential() throws Exception {
 
-		KeyPair rootKeyPair = BCSSLUtils.generateRSAKeyPair();
-		X509Certificate rootCert = BCSSLUtils.generateRootCert(rootKeyPair);
+		KeyPair rootKeyPair = BC_SSLUtils.generateRSAKeyPair();
+		X509Certificate rootCert = BC_SSLUtils.generateRootCert(rootKeyPair);
 
-		X500PrivateCredential intermediateCredential = BCSSLUtils.createIntermediateCredential(rootKeyPair.getPrivate(), rootCert);
+		X500PrivateCredential intermediateCredential = BC_SSLUtils.createIntermediateCredential(rootKeyPair.getPrivate(), rootCert);
 
-		X500PrivateCredential endEntityCredential = BCSSLUtils.createEndEntityCredential(
+		X500PrivateCredential endEntityCredential = BC_SSLUtils.createEndEntityCredential(
 				intermediateCredential.getPrivateKey(), intermediateCredential.getCertificate());
 
 		System.out.println("ROOT ---------------------  ");
@@ -59,67 +56,28 @@ class BCDemoTest {
 		writer.flush();
 		writer.write("\n");
 		writer.flush();
+		writer.write("End ---------------- \n");
 		writer.writeObject(endEntityCredential.getCertificate());
 		writer.close();
 		System.out.println("test create root and entity credential PEM done");
 	}
 	
-	// from CreateKeystores.java
-//	@Test
-	void createKeyStoreTrustStore() throws Exception {
-
-        X500PrivateCredential    rootCredential = BCSSLUtils.createRootCredential();
-        X500PrivateCredential    interCredential = BCSSLUtils.createIntermediateCredential(rootCredential.getPrivateKey(), rootCredential.getCertificate());
-        X500PrivateCredential    endCredential = BCSSLUtils.createEndEntityCredential(interCredential.getPrivateKey(), interCredential.getCertificate());
-        
-        // client credentials
-        KeyStore keyStore = KeyStore.getInstance("PKCS12", "BC");
-        
-        keyStore.load(null, null);
-        
-        keyStore.setKeyEntry(BCSSLUtils.CLIENT_NAME, endCredential.getPrivateKey(), BCSSLUtils.CLIENT_PASSWORD, 
-                new Certificate[] { endCredential.getCertificate(), interCredential.getCertificate(), rootCredential.getCertificate() });
-        
-        keyStore.store(new FileOutputStream(BCSSLUtils.CLIENT_NAME + ".p12"), BCSSLUtils.CLIENT_PASSWORD);
-        
-        // trust store for client
-        keyStore = KeyStore.getInstance("JKS");
-        
-        keyStore.load(null, null);
-        
-        keyStore.setCertificateEntry(BCSSLUtils.SERVER_NAME, rootCredential.getCertificate());
-        
-        // NOTE: you cannot write to src/test/resource, read only
-        System.out.println("==== truststore = " + BCSSLUtils.TRUST_STORE_NAME + ".jks");
-        keyStore.store(new FileOutputStream(BCSSLUtils.TRUST_STORE_NAME + ".jks"), BCSSLUtils.TRUST_STORE_PASSWORD);
-        
-        // server credentials
-        keyStore = KeyStore.getInstance("JKS");
-        
-        keyStore.load(null, null);
-        
-        keyStore.setKeyEntry(BCSSLUtils.SERVER_NAME, rootCredential.getPrivateKey(), BCSSLUtils.SERVER_PASSWORD,
-                new Certificate[] { rootCredential.getCertificate() });
-        
-        System.out.println("=== keystore = " + BCSSLUtils.SERVER_NAME + ".jks");
-        keyStore.store(new FileOutputStream(BCSSLUtils.SERVER_NAME + ".jks"), BCSSLUtils.SERVER_PASSWORD);
-	}
-	
 	@Test
 	void createKeyStoreTrustStoreWithConfig() throws Exception {
 
-        X500PrivateCredential    rootCredential = BCSSLUtils.createRootCredential();
-        X500PrivateCredential    interCredential = BCSSLUtils.createIntermediateCredential(rootCredential.getPrivateKey(), rootCredential.getCertificate());
-        X500PrivateCredential    endCredential = BCSSLUtils.createEndEntityCredential(interCredential.getPrivateKey(), interCredential.getCertificate());
+        X500PrivateCredential    rootCredential = BC_SSLUtils.createRootCredential();
+        X500PrivateCredential    interCredential = BC_SSLUtils.createIntermediateCredential(rootCredential.getPrivateKey(), rootCredential.getCertificate());
+        X500PrivateCredential    endCredential = BC_SSLUtils.createEndEntityCredential(interCredential.getPrivateKey(), interCredential.getCertificate());
         
         // client credentials (always PKCS12)
-        KeyStore keyStore = KeyStore.getInstance("PKCS12", "BC");        
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+//        KeyStore keyStore = KeyStore.getInstance("PKCS12", "BC");   
         keyStore.load(null, null);  // create an empty keystore       
         keyStore.setKeyEntry(config.getClientName(), endCredential.getPrivateKey(), config.getClientPasswordAry(), 
                 new Certificate[] { endCredential.getCertificate(), interCredential.getCertificate(), rootCredential.getCertificate() });
         
-        System.out.println("==== client credentials = " + config.getClientName() + ".p12");
-        keyStore.store(new FileOutputStream(config.getClientName() + ".p12"), config.getClientPasswordAry());
+        System.out.println("==== client credentials = " + config.getClientName() + "-1.p12");
+        keyStore.store(new FileOutputStream(config.getClientName() + "-1.p12"), config.getClientPasswordAry());
         
         // trust store for client
         keyStore = KeyStore.getInstance(config.getTrustStoreType());        
@@ -127,8 +85,8 @@ class BCDemoTest {
         keyStore.setCertificateEntry(config.getServerName(), rootCredential.getCertificate());
         
         // NOTE: you cannot write to src/test/resource
-        System.out.println("==== truststore = " + config.getTrustStoreName() + config.getTrustStoreFileExt());
-        keyStore.store(new FileOutputStream(config.getTrustStoreName() + config.getTrustStoreFileExt()), config.getTrustStorePasswordAry());
+        System.out.println("==== truststore = " + config.getTrustStoreName() + "-1" + config.getTrustStoreFileExt());
+        keyStore.store(new FileOutputStream(config.getTrustStoreName() + "-1" + config.getTrustStoreFileExt()), config.getTrustStorePasswordAry());
         
         // server credentials
         keyStore = KeyStore.getInstance(config.getKeyStoreType());        
@@ -136,10 +94,9 @@ class BCDemoTest {
         keyStore.setKeyEntry(config.getServerName(), rootCredential.getPrivateKey(), config.getServerPasswordAry(),
                 new Certificate[] { rootCredential.getCertificate() });
         
-        System.out.println("=== keystore = " + config.getServerName() + config.getKeyStoreFileExt());
-        keyStore.store(new FileOutputStream(config.getServerName() + config.getKeyStoreFileExt()), config.getServerPasswordAry());
+        System.out.println("=== keystore = " + config.getServerName() + "-1" + config.getKeyStoreFileExt());
+        keyStore.store(new FileOutputStream(config.getServerName() + "-1" + config.getKeyStoreFileExt()), config.getServerPasswordAry());
         
 	}
-
 
 }

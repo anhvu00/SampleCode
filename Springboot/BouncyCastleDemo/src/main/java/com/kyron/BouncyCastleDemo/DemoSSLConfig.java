@@ -1,8 +1,24 @@
 package com.kyron.BouncyCastleDemo;
 
-import javax.annotation.PostConstruct;
+import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.util.Date;
 
+import javax.annotation.PostConstruct;
+import javax.security.auth.x500.X500PrivateCredential;
+
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.cert.X509v1CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cert.jcajce.JcaX509v1CertificateBuilder;
+import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -13,13 +29,8 @@ import org.springframework.context.annotation.PropertySource;
  */
 @Configuration
 @PropertySource("classpath:application.properties")
+@ComponentScan("com.kyron")
 public class DemoSSLConfig {
-	
-	@Value( "${bc.rootCN:root_CA_default}" )
-	private String rootCN;
-	
-	@Value( "${bc.notdefined:default_value}" )
-	private String defvalue;
 	
 	@Value( "${bc.host:localhost}" )
 	private String host;
@@ -73,15 +84,7 @@ public class DemoSSLConfig {
     }
     
 
-	public String getRootCN() {
-		return rootCN;
-	}
-
-
-	public String getDefvalue() {
-		return defvalue;
-	}
-
+    // getters
 
 	public String getHost() {
 		return host;

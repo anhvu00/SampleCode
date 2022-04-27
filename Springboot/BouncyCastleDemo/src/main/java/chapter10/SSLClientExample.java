@@ -26,7 +26,7 @@ public class SSLClientExample extends BaseClass
         OutputStream     out = cSock.getOutputStream();
         InputStream      in = cSock.getInputStream();
         
-        out.write(BCSSLUtils.toByteArray("World"));
+        out.write(BC_SSLUtils.toByteArray("World"));
         out.write('!');
         
         int ch = 0;
@@ -43,7 +43,7 @@ public class SSLClientExample extends BaseClass
 
         TrustManagerFactory tmfc = TrustManagerFactory.getInstance("SunX509");
         KeyStore trustStore = KeyStore.getInstance("JKS");
-        trustStore.load(new FileInputStream("trustStore.jks"), BCSSLUtils.TRUST_STORE_PASSWORD);
+        trustStore.load(new FileInputStream("trustStore-1.jks"), BC_SSLUtils.TRUST_STORE_PASSWORD);
         tmfc.init(trustStore);
 
         SSLContext sslContext = SSLContext.getInstance("TLS");
@@ -60,7 +60,7 @@ public class SSLClientExample extends BaseClass
         //SSLSocketFactory fact = (SSLSocketFactory)SSLSocketFactory.getDefault();
         SSLContext sslContext = createSslContext();
         SSLSocketFactory fact = sslContext.getSocketFactory();
-        SSLSocket        cSock = (SSLSocket)fact.createSocket(BCSSLUtils.HOST, BCSSLUtils.PORT_NO);
+        SSLSocket        cSock = (SSLSocket)fact.createSocket(BC_SSLUtils.HOST, BC_SSLUtils.PORT_NO);
         
         doProtocol(cSock);
     }

@@ -31,7 +31,7 @@ public class SSLServerExample extends BaseClass
         InputStream in = sSock.getInputStream();
         OutputStream out = sSock.getOutputStream();
 
-        out.write(BCSSLUtils.toByteArray("Hello "));
+        out.write(BC_SSLUtils.toByteArray("Hello "));
         
         int ch = 0;
         while ((ch = in.read()) != '!')
@@ -50,8 +50,8 @@ public class SSLServerExample extends BaseClass
         KeyManagerFactory kmfc = KeyManagerFactory.getInstance("SunX509");
         KeyStore keyStore = KeyStore.getInstance("JKS");
         FileInputStream fisKeyStore = new FileInputStream(keyStoreName);
-        keyStore.load(fisKeyStore, BCSSLUtils.SERVER_PASSWORD);
-        kmfc.init(keyStore, BCSSLUtils.SERVER_PASSWORD);
+        keyStore.load(fisKeyStore, BC_SSLUtils.SERVER_PASSWORD);
+        kmfc.init(keyStore, BC_SSLUtils.SERVER_PASSWORD);
 
         SSLContext sslContext = SSLContext.getInstance("TLS");
         sslContext.init(kmfc.getKeyManagers(), null, null);
@@ -65,11 +65,11 @@ public class SSLServerExample extends BaseClass
 
         //-Djavax.net.ssl.keyStore=server.jks -Djavax.net.ssl.keyStorePassword=serverPassword
         //SSLServerSocketFactory fact = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
-        SSLContext sslContext = createSslContext("server.jks");
+        SSLContext sslContext = createSslContext("server-1.jks");
         SSLServerSocketFactory fact = sslContext.getServerSocketFactory();
         System.out.println("default cipher suites : " + Arrays.toString(fact.getDefaultCipherSuites()));
         System.out.println("supported cipher suites : " + Arrays.toString(fact.getSupportedCipherSuites()));
-        SSLServerSocket        sSock = (SSLServerSocket)fact.createServerSocket(BCSSLUtils.PORT_NO);
+        SSLServerSocket        sSock = (SSLServerSocket)fact.createServerSocket(BC_SSLUtils.PORT_NO);
         SSLSocket sslSock = (SSLSocket)sSock.accept();
         sslSock.addHandshakeCompletedListener(event -> {
             System.out.println("current cipher suite : " + event.getCipherSuite());

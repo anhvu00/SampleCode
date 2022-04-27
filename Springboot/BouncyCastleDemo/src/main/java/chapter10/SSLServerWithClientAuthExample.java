@@ -17,12 +17,12 @@ public class SSLServerWithClientAuthExample
 
         KeyManagerFactory kmfc = KeyManagerFactory.getInstance("SunX509");
         KeyStore keyStore = KeyStore.getInstance("JKS");
-        keyStore.load(new FileInputStream("server.jks"), BCSSLUtils.SERVER_PASSWORD);
-        kmfc.init(keyStore, BCSSLUtils.SERVER_PASSWORD);
+        keyStore.load(new FileInputStream("server-1.jks"), BC_SSLUtils.SERVER_PASSWORD);
+        kmfc.init(keyStore, BC_SSLUtils.SERVER_PASSWORD);
 
         TrustManagerFactory tmfc = TrustManagerFactory.getInstance("SunX509");
         KeyStore trustStore = KeyStore.getInstance("JKS");
-        trustStore.load(new FileInputStream("trustStore.jks"), BCSSLUtils.TRUST_STORE_PASSWORD);
+        trustStore.load(new FileInputStream("trustStore-1.jks"), BC_SSLUtils.TRUST_STORE_PASSWORD);
         tmfc.init(trustStore);
 
         SSLContext sslContext = SSLContext.getInstance("TLS");
@@ -44,7 +44,7 @@ public class SSLServerWithClientAuthExample
 
         SSLContext sslContext = createSslContext();
         SSLServerSocketFactory fact = sslContext.getServerSocketFactory();
-        SSLServerSocket        sSock = (SSLServerSocket)fact.createServerSocket(BCSSLUtils.PORT_NO);
+        SSLServerSocket        sSock = (SSLServerSocket)fact.createServerSocket(BC_SSLUtils.PORT_NO);
 
         sSock.setNeedClientAuth(true);
 

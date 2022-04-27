@@ -45,7 +45,7 @@ public class HTTPSClientExample
 		SSLSocketFactory fact = sslContext.getSocketFactory();
 		
 		// specify the URL and connection attributes
-		URL url = new URL("https://"+ BCSSLUtils.HOST + ":" + BCSSLUtils.PORT_NO);
+		URL url = new URL("https://"+ BC_SSLUtils.HOST + ":" + BC_SSLUtils.PORT_NO);
 		
 		HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
 		

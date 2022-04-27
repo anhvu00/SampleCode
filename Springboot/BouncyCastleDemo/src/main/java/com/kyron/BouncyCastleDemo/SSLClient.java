@@ -12,7 +12,7 @@ public class SSLClient {
 	// hard code to look like app.properties. fix later...
      static
        {
-    	 String basePath = "/Users/anh/Github/SampleCode/Springboot/BouncyCastleDemo/";
+    	 String basePath = "/Users/anh/Github/SampleCode/Springboot/BouncyCastleDemo/src/main/resources/stores/";
          System.setProperty("javax.net.ssl.trustStore", basePath + "trustStore.jks");
          System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
          System.setProperty("javax.net.ssl.keyStore", basePath + "server.jks");

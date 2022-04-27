@@ -63,7 +63,7 @@ public class HTTPSServerExample extends SSLServerWithClientAuthIdExample
     {
 		SSLContext             sslContext = createSSLContext();
         SSLServerSocketFactory fact = sslContext.getServerSocketFactory();
-        SSLServerSocket        sSock = (SSLServerSocket)fact.createServerSocket(BCSSLUtils.PORT_NO);
+        SSLServerSocket        sSock = (SSLServerSocket)fact.createServerSocket(BC_SSLUtils.PORT_NO);
     
         // client authenticate where possible
         sSock.setNeedClientAuth(true);

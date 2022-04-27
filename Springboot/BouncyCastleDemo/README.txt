@@ -9,6 +9,9 @@ After a successful build, you can run the following server client pairs:
 3. SSLServerWithClientAuthIdExample (server) and SSLCilentWithClientAuthTrustExample (client) - see "hello world" on console
 4. BouncyCastleDemoApplication (server) and SSLClient (client) - see "hello" on console
 
+5. chapter10/BC_SSLUtils.java, BCDemoTest.java = produce client-1.p12, server-1.jks, and trustStore-1.jks and all *Example in chapter10/ foler
+6. BCSSLUtils.java, DemoSSLConfig.java, BCSSLUtilsTest.java = my specific tests for my kirby project, produce resources/stores/server.jks and trustStore.jks
+
 TODO:
 - Update SSLClient to use the values in application.properties
 - The key/trust stores are created by the unit test with the src/test/resources/app.properties.

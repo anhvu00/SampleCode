@@ -52,6 +52,10 @@ import org.bouncycastle.operator.DefaultDigestAlgorithmIdentifierFinder;
 import org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder;
 import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.kyron.BouncyCastleDemo.DemoSSLConfig;
 
 
 
@@ -60,19 +64,21 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
  * TODO: 
  * - move hard coded constants to properties
  */
-public class BCSSLUtils 
+
+public class BC_SSLUtils 
 {
-    /**
+	
+    /*
      * Host name for our examples to use.
      */
     static final String HOST = "localhost";
     
-    /**
+    /*
      * Port number for our examples to use.
      */
     static final int PORT_NO = 8443;
 
-    /**
+    /*
      * Names and passwords for the key store entries we need.
      */
     public static final String SERVER_NAME = "server";
@@ -86,10 +92,12 @@ public class BCSSLUtils
     
     public static char[] KEY_PASSWD = "changeit".toCharArray();
     
-    private static final int VALIDITY_PERIOD = 7 * 24 * 60 * 60 * 1000; // one week
-    public static String ROOT_ALIAS = "root";
-    public static String INTERMEDIATE_ALIAS = "intermediate";
-    public static String END_ENTITY_ALIAS = "end";
+	
+    public static final int VALIDITY_PERIOD_MS = 7 * 24 * 60 * 60 * 1000; // one week in milliseconds
+    public static final String ROOT_ALIAS = "root";
+    public static final String INTERMEDIATE_ALIAS = "intermediate";
+    public static final String END_ENTITY_ALIAS = "end";
+    
     
     /**
      * Create a KeyStore containing the a private credential with
@@ -102,9 +110,9 @@ public class BCSSLUtils
 
         store.load(null, null);
         
-        X500PrivateCredential    rootCredential = BCSSLUtils.createRootCredential();
-        X500PrivateCredential    interCredential = BCSSLUtils.createIntermediateCredential(rootCredential.getPrivateKey(), rootCredential.getCertificate());
-        X500PrivateCredential    endCredential = BCSSLUtils.createEndEntityCredential(interCredential.getPrivateKey(), interCredential.getCertificate());
+        X500PrivateCredential    rootCredential = BC_SSLUtils.createRootCredential();
+        X500PrivateCredential    interCredential = BC_SSLUtils.createIntermediateCredential(rootCredential.getPrivateKey(), rootCredential.getCertificate());
+        X500PrivateCredential    endCredential = BC_SSLUtils.createEndEntityCredential(interCredential.getPrivateKey(), interCredential.getCertificate());
         
         store.setCertificateEntry(rootCredential.getAlias(), rootCredential.getCertificate());
         store.setKeyEntry(endCredential.getAlias(), endCredential.getPrivateKey(), keyPassword.toCharArray(), 
@@ -133,9 +141,6 @@ public class BCSSLUtils
         
         return (PKIXCertPathBuilderResult)builder.build(buildParams);
     }
-    
-    
-
     
     /**
      * Generate a X500PrivateCredential for the root entity.
@@ -205,42 +210,13 @@ public class BCSSLUtils
     public static KeyPair generateRSAKeyPair()
         throws Exception
 	{
-        KeyPairGenerator  kpGen = KeyPairGenerator.getInstance("RSA", "BC");
+        KeyPairGenerator  kpGen = KeyPairGenerator.getInstance("RSA");
+//        KeyPairGenerator  kpGen = KeyPairGenerator.getInstance("RSA", "BC");
     
         kpGen.initialize(1024, new SecureRandom());
     
         return kpGen.generateKeyPair();
 	}
-    
-
-    
-    /**
-     * Generate a sample V1 certificate to use as a CA root certificate
-     */
-    public static X509Certificate generateRootCertOld(KeyPair pair)
-            throws Exception
-    {
-
-        AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find("SHA1WithRSAEncryption");
-        AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
-        AsymmetricKeyParameter privateKeyAsymKeyParam = PrivateKeyFactory.createKey(pair.getPrivate().getEncoded());
-
-        ContentSigner signer = new BcRSAContentSignerBuilder(sigAlgId, digAlgId).build(privateKeyAsymKeyParam);
-
-        X509v1CertificateBuilder builder = new X509v1CertificateBuilder(
-                new X500Name("CN=Test CA Certificate"),
-                new BigInteger(64, new SecureRandom()),
-                new Date(),
-                new Date(System.currentTimeMillis() + VALIDITY_PERIOD),
-                new X500Name("CN=Test CA Certificate"),
-                SubjectPublicKeyInfo.getInstance(pair.getPublic().getEncoded())
-        );
-
-        X509CertificateHolder holder = builder.build(signer);
-
-        return new JcaX509CertificateConverter().setProvider("BC").getCertificate(holder);
-    }
-
 
     public static X509Certificate generateRootCert(KeyPair pair)
             throws Exception
@@ -250,14 +226,15 @@ public class BCSSLUtils
                 new X500Name("CN=Test CA Certificate"),
                 new BigInteger(64, new SecureRandom()),
                 new Date(),
-                new Date(System.currentTimeMillis() + VALIDITY_PERIOD),
+                new Date(System.currentTimeMillis() + VALIDITY_PERIOD_MS),
                 new X500Name("CN=Test CA Certificate"),
                 pair.getPublic()
         );
 
-        ContentSigner signer = new JcaContentSignerBuilder("SHA1WithRSAEncryption").setProvider("BC").build(pair.getPrivate());
-
-        return new JcaX509CertificateConverter().setProvider("BC").getCertificate(builder.build(signer));
+        ContentSigner signer = new JcaContentSignerBuilder("SHA1WithRSAEncryption").build(pair.getPrivate());
+        return new JcaX509CertificateConverter().getCertificate(builder.build(signer));
+//        ContentSigner signer = new JcaContentSignerBuilder("SHA1WithRSAEncryption").setProvider("BC").build(pair.getPrivate());
+//        return new JcaX509CertificateConverter().setProvider("BC").getCertificate(builder.build(signer));
     }
     
     /**
@@ -277,7 +254,7 @@ public class BCSSLUtils
                 new X500Name(caCert.getSubjectDN().getName()),
                 new BigInteger(64, new SecureRandom()),
                 new Date(),
-                new Date(System.currentTimeMillis() + VALIDITY_PERIOD),
+                new Date(System.currentTimeMillis() + VALIDITY_PERIOD_MS),
                 new X500Name("CN=Test Intermediate Certificate"),
                 SubjectPublicKeyInfo.getInstance(intKey.getEncoded())
         );
@@ -300,7 +277,7 @@ public class BCSSLUtils
                 caCert,
                 new BigInteger(64, new SecureRandom()),
                 new Date(),
-                new Date(System.currentTimeMillis() + VALIDITY_PERIOD),
+                new Date(System.currentTimeMillis() + VALIDITY_PERIOD_MS),
                 new X500Name("CN=Test Intermediate Certificate"),
                 intKey
         );
@@ -333,7 +310,7 @@ public class BCSSLUtils
                 new X500Name(caCert.getSubjectDN().getName()),
                 new BigInteger(64, new SecureRandom()),
                 new Date(),
-                new Date(System.currentTimeMillis() + VALIDITY_PERIOD),
+                new Date(System.currentTimeMillis() + VALIDITY_PERIOD_MS),
                 new X500Name("CN=Test End Certificate"),
                 SubjectPublicKeyInfo.getInstance(entityKey.getEncoded())
         );
@@ -355,7 +332,7 @@ public class BCSSLUtils
                 caCert,
                 new BigInteger(64, new SecureRandom()),
                 new Date(),
-                new Date(System.currentTimeMillis() + VALIDITY_PERIOD),
+                new Date(System.currentTimeMillis() + VALIDITY_PERIOD_MS),
                 new X500Name("CN=Test End Certificate"),
                 entityKey
         );

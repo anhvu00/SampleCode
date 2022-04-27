@@ -25,15 +25,15 @@ public class SSLClientWithClientAuthTrustExample
 		KeyManagerFactory mgrFact = KeyManagerFactory.getInstance("SunX509");
 		KeyStore clientStore = KeyStore.getInstance("PKCS12");
 
-		clientStore.load(new FileInputStream("client.p12"), BCSSLUtils.CLIENT_PASSWORD);
+		clientStore.load(new FileInputStream("client-1.p12"), BC_SSLUtils.CLIENT_PASSWORD);
 
-		mgrFact.init(clientStore, BCSSLUtils.CLIENT_PASSWORD);
+		mgrFact.init(clientStore, BC_SSLUtils.CLIENT_PASSWORD);
 		
 		// set up a trust manager so we can recognize the server
 		TrustManagerFactory trustFact = TrustManagerFactory.getInstance("SunX509");
 		KeyStore            trustStore = KeyStore.getInstance("JKS");
 		
-		trustStore.load(new FileInputStream("trustStore.jks"), BCSSLUtils.TRUST_STORE_PASSWORD);
+		trustStore.load(new FileInputStream("trustStore-1.jks"), BC_SSLUtils.TRUST_STORE_PASSWORD);
 		
 		trustFact.init(trustStore);
 		
@@ -51,7 +51,7 @@ public class SSLClientWithClientAuthTrustExample
     {
         SSLContext       sslContext = createSSLContext();
 		SSLSocketFactory fact = sslContext.getSocketFactory();
-        SSLSocket        cSock = (SSLSocket)fact.createSocket(BCSSLUtils.HOST, BCSSLUtils.PORT_NO);
+        SSLSocket        cSock = (SSLSocket)fact.createSocket(BC_SSLUtils.HOST, BC_SSLUtils.PORT_NO);
 
         doProtocol(cSock);
     }
