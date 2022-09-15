@@ -1,6 +1,7 @@
 package chapter10;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.KeyStore;
 
 import javax.net.ssl.KeyManagerFactory;
@@ -25,7 +26,8 @@ public class SSLClientWithClientAuthTrustExample
 		KeyManagerFactory mgrFact = KeyManagerFactory.getInstance("SunX509");
 		KeyStore clientStore = KeyStore.getInstance("PKCS12");
 
-		clientStore.load(new FileInputStream("client-1.p12"), BC_SSLUtils.CLIENT_PASSWORD);
+		InputStream isClient = SSLClientWithClientAuthTrustExample.class.getClassLoader().getResourceAsStream("store/client");
+		clientStore.load(isClient, BC_SSLUtils.CLIENT_PASSWORD);
 
 		mgrFact.init(clientStore, BC_SSLUtils.CLIENT_PASSWORD);
 		
@@ -33,7 +35,8 @@ public class SSLClientWithClientAuthTrustExample
 		TrustManagerFactory trustFact = TrustManagerFactory.getInstance("SunX509");
 		KeyStore            trustStore = KeyStore.getInstance("JKS");
 		
-		trustStore.load(new FileInputStream("trustStore-1.jks"), BC_SSLUtils.TRUST_STORE_PASSWORD);
+		InputStream isTrustStore = SSLClientWithClientAuthTrustExample.class.getClassLoader().getResourceAsStream("store/cacerts");
+		trustStore.load(isTrustStore, BC_SSLUtils.TRUST_STORE_PASSWORD);
 		
 		trustFact.init(trustStore);
 		
@@ -51,7 +54,7 @@ public class SSLClientWithClientAuthTrustExample
     {
         SSLContext       sslContext = createSSLContext();
 		SSLSocketFactory fact = sslContext.getSocketFactory();
-        SSLSocket        cSock = (SSLSocket)fact.createSocket(BC_SSLUtils.HOST, BC_SSLUtils.PORT_NO);
+        SSLSocket        cSock = (SSLSocket)fact.createSocket("localhost", 9020);
 
         doProtocol(cSock);
     }

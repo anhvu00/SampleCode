@@ -2,6 +2,7 @@ package chapter10;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.security.KeyStore;
 
@@ -17,12 +18,16 @@ public class SSLServerWithClientAuthExample
 
         KeyManagerFactory kmfc = KeyManagerFactory.getInstance("SunX509");
         KeyStore keyStore = KeyStore.getInstance("JKS");
-        keyStore.load(new FileInputStream("server-1.jks"), BC_SSLUtils.SERVER_PASSWORD);
+//        keyStore.load(new FileInputStream("server-1.jks"), BC_SSLUtils.SERVER_PASSWORD);
+		InputStream serverStream = SSLClientWithClientAuthTrustExample.class.getClassLoader().getResourceAsStream("store/server");
+        keyStore.load(serverStream, BC_SSLUtils.SERVER_PASSWORD);
         kmfc.init(keyStore, BC_SSLUtils.SERVER_PASSWORD);
 
         TrustManagerFactory tmfc = TrustManagerFactory.getInstance("SunX509");
         KeyStore trustStore = KeyStore.getInstance("JKS");
-        trustStore.load(new FileInputStream("trustStore-1.jks"), BC_SSLUtils.TRUST_STORE_PASSWORD);
+//        trustStore.load(new FileInputStream("trustStore-1.jks"), BC_SSLUtils.TRUST_STORE_PASSWORD);
+		InputStream trustStream = SSLClientWithClientAuthTrustExample.class.getClassLoader().getResourceAsStream("store/cacerts");
+        trustStore.load(trustStream, BC_SSLUtils.TRUST_STORE_PASSWORD);
         tmfc.init(trustStore);
 
         SSLContext sslContext = SSLContext.getInstance("TLS");

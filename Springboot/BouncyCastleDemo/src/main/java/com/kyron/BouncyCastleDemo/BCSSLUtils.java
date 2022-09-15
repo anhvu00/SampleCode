@@ -9,20 +9,28 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.Date;
 
 import javax.security.auth.x500.X500PrivateCredential;
 
 import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.X500NameBuilder;
+import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
 import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
+import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v1CertificateBuilder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v1CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
@@ -167,4 +175,59 @@ public class BCSSLUtils {
         
         return keyStore;
 	}
+	
+	/* 5/10 - cert with CN
+	public static void test1() {
+		SecureRandom random = new SecureRandom();
+
+		// create keypair
+		KeyPairGenerator keypairGen = KeyPairGenerator.getInstance("RSA");
+		keypairGen.initialize(256, random);
+		KeyPair keypair = keypairGen.generateKeyPair();
+
+		// fill in certificate fields
+		X500Name subject = new X500NameBuilder(BCStyle.INSTANCE)
+		    .addRDN(BCStyle.CN, "stackoverflow.com")
+		    .build();
+		byte[] id = new byte[20];
+		random.nextBytes(id);
+		BigInteger serial = new BigInteger(160, random);
+		X509v3CertificateBuilder certificate = new JcaX509v3CertificateBuilder(
+		    subject,
+		    serial,
+		    Date.from(LocalDate.of(2000, 1, 1).atStartOfDay(ZoneOffset.UTC).toInstant()),
+		    Date.from(LocalDate.of(2035, 1, 1).atStartOfDay(ZoneOffset.UTC).toInstant()),
+		    subject,
+		    keypair.getPublic());
+		certificate.addExtension(Extension.subjectKeyIdentifier, false, id);
+		certificate.addExtension(Extension.authorityKeyIdentifier, false, id);
+		BasicConstraints constraints = new BasicConstraints(true);
+		certificate.addExtension(
+		    Extension.basicConstraints,
+		    true,
+		    constraints.getEncoded());
+		KeyUsage usage = new KeyUsage(KeyUsage.keyCertSign | KeyUsage.digitalSignature);
+		certificate.addExtension(Extension.keyUsage, false, usage.getEncoded());
+		ExtendedKeyUsage usageEx = new ExtendedKeyUsage(new KeyPurposeId[] {
+		    KeyPurposeId.id_kp_serverAuth,
+		    KeyPurposeId.id_kp_clientAuth
+		});
+		certificate.addExtension(
+		    Extension.extendedKeyUsage,
+		    false,
+		    usageEx.getEncoded());
+
+		// build BouncyCastle certificate
+		ContentSigner signer = new JcaContentSignerBuilder("SHA256withRSA")
+		    .build(keypair.getPrivate());
+		X509CertificateHolder holder = certificate.build(signer);
+
+		// convert to JRE certificate
+		JcaX509CertificateConverter converter = new JcaX509CertificateConverter();
+		converter.setProvider(new BouncyCastleProvider());
+		X509Certificate x509 = converter.getCertificate(holder);
+
+		// serialize in DER format
+		byte[] serialized = x509.getEncoded();
+	} */
 }

@@ -13,9 +13,9 @@ public class SSLClient {
      static
        {
     	 String basePath = "/Users/anh/Github/SampleCode/Springboot/BouncyCastleDemo/src/main/resources/stores/";
-         System.setProperty("javax.net.ssl.trustStore", basePath + "trustStore.jks");
+         System.setProperty("javax.net.ssl.trustStore", basePath + "cacerts");
          System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
-         System.setProperty("javax.net.ssl.keyStore", basePath + "server.jks");
+         System.setProperty("javax.net.ssl.keyStore", basePath + "server");
          System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
       }
 

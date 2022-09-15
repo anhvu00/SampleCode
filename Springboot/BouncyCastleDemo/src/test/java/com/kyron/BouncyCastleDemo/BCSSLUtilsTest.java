@@ -2,12 +2,19 @@ package com.kyron.BouncyCastleDemo;
 
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyStore;
+import java.security.PublicKey;
 import java.security.Security;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 import javax.security.auth.x500.X500PrivateCredential;
+import javax.xml.bind.DatatypeConverter;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
@@ -16,6 +23,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+
 
 @SpringBootTest(classes = { DemoSSLConfig.class })
 @TestPropertySource("classpath:application.properties")
@@ -80,4 +89,34 @@ class BCSSLUtilsTest {
 				config.getServerPasswordAry());
 		
 	}
+	
+	@Test
+	void getPublicKey() throws Exception {
+		KeyPair rootKeyPair = BCSSLUtils.generateRSAKeyPair();
+		X509Certificate rootCert = BCSSLUtils.generateRootCert(rootKeyPair);
+		PublicKey pub = rootCert.getPublicKey();
+		System.out.println("=== public key algo = " + pub.getAlgorithm()); // RSA
+		System.out.println("=== public key format = " + pub.getFormat());  // X509
+		byte[] encodedAry = pub.getEncoded();
+		System.out.println("=== decode = " + decode1(encodedAry));
+		
+        KeyFactory factory = KeyFactory.getInstance("RSA");
+        X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(encodedAry);
+        RSAPublicKey rsaPK = (RSAPublicKey) factory.generatePublic(pubKeySpec);
+        System.out.println("=== rsaPK=" + rsaPK.toString());
+	}
+	
+	private String decode1( byte[] ary) {
+		//converting byte to String 
+		String strKey = Base64.getEncoder().encodeToString(ary);
+		return strKey;
+	}
+	
+	private String decode2(byte[] ary) {
+		byte[] decodedBytes = Base64.getDecoder().decode(ary);
+		String decodedString = new String(decodedBytes);
+
+		return decodedString;
+	}
+
 }
