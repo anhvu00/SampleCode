@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "bootstrap"
+  "defaultProject": "bootstrap",
+  "cli": {
+    "analytics": false
+  }
 }
