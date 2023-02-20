@@ -8,6 +8,9 @@
       <app-card title="Card {{i}}"><div>Mini Card Content Here</div></app-card>
       <!--<app-mini-card [title]="mc.title" [textValue]="mc.textValue" [value]="mc.value" [color]="mc.color" [percentValue]="mc.percentValue"></app-mini-card> -->
     </mat-grid-tile>
+    <!--
+    <app-mini-card [title]="mc.title" [textValue]="mc.textValue" [value]="mc.value" [color]="mc.color" [percentValue]="mc.percentValue"></app-mini-card>
+    -->
     <!--Charts-->
     <mat-grid-tile *ngFor="let i of [5, 6]" [colspan]="( cardLayout | async )?.chart.cols"
       [rowspan]="( cardLayout | async )?.chart.rows">
