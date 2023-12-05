@@ -1,0 +1,21 @@
+Goal:
+Test kubernetes horizontal scaling (i.e. increase replicas when a condition is met).
+Requirements:
+- kubernetes
+- kafka/zookeeper
+- prometheus (to export metrics so kubernetes HPA can scale)
+Test set up:
+1. kafka/zookeeper
+https://kafka.apache.org/quickstart
+- Install, run zookeeper, kafka server, all default settings.
+- Use command line to create "anh-topic" and add/produce some messages to it
+- Use command line to consume messages from "anh-topic"
+2. Springboot maven java 17 applications (mvn spring-boot:run)
+- Create a Producer to add messages to "anh-topic" every second for 2 minutes
+- Create a Consumer to read messages from "anh-topic" every 3 seconds
+The idea is producing faster than consuming to create a "lag" which will trigger the scaling.
+The project kafkaProducer and kafkaConsumer demonstrate this behavior.
+
+TODO:
+- Calculate a "lag" in the consumer
+- Use Prometheus to expose this "lag" metrics to kubernetes HPA
