@@ -12,10 +12,13 @@ https://kafka.apache.org/quickstart
 - Use command line to consume messages from "anh-topic"
 2. Springboot maven java 17 applications (mvn spring-boot:run)
 - Create a Producer to add messages to "anh-topic" every second for 2 minutes
-- Create a Consumer to read messages from "anh-topic" every 3 seconds
+- Create a Consumer to read messages from "anh-topic" every 3 seconds.
+- In the Consumer, calculate the "lag" in consuming "anh-topic"
+- Add prometheus to the Consumer to export this "lag"
 The idea is producing faster than consuming to create a "lag" which will trigger the scaling.
 The project kafkaProducer and kafkaConsumer demonstrate this behavior.
 
 TODO:
-- Calculate a "lag" in the consumer
-- Use Prometheus to expose this "lag" metrics to kubernetes HPA
+- Cannot find a Docker Desktop version which works on MacOS Ventura 13.6.1 = blocker
+I need Prometheus and the only installation available is as a Docker image.
+The workaround is to use my Windows laptop where Docker Desktop works. 
