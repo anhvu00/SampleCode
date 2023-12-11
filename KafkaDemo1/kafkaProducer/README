@@ -1,0 +1,8 @@
+When run (mvn spring-boot:run), this app produces a message 'hello there' in the 'anh-topic' kafka queue every second for 2 minutes.
+It writes every message out to console/terminal with a timestamp.
+Ex.
+Produced message: hello there at 1702329821798
+Produced message: hello there at 1702329823143
+Produced message: hello there at 1702329824148
+
+Use this to test producer, consumer, and prometheus.

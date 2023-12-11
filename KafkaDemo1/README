@@ -1,15 +1,18 @@
 Goal:
 Test kubernetes horizontal scaling (i.e. increase replicas when a condition is met).
+
 Requirements:
 - kubernetes
 - kafka/zookeeper
 - prometheus (to export metrics so kubernetes HPA can scale)
+
 Test set up:
 1. kafka/zookeeper
 https://kafka.apache.org/quickstart
 - Install, run zookeeper, kafka server, all default settings.
 - Use command line to create "anh-topic" and add/produce some messages to it
 - Use command line to consume messages from "anh-topic"
+
 2. Springboot maven java 17 applications (mvn spring-boot:run)
 - Create a Producer to add messages to "anh-topic" every second for 2 minutes
 - Create a Consumer to read messages from "anh-topic" every 3 seconds.
@@ -17,8 +20,24 @@ https://kafka.apache.org/quickstart
 - Add prometheus to the Consumer to export this "lag"
 The idea is producing faster than consuming to create a "lag" which will trigger the scaling.
 The project kafkaProducer and kafkaConsumer demonstrate this behavior.
+- (Optional) Create a java app to scrape the "lag" number exposed by Prometheus. This helps verify everything is working as expected (produce, consume, expose metric). We still need Prometheus server running for it to work.
 
-TODO:
-- Cannot find a Docker Desktop version which works on MacOS Ventura 13.6.1 = blocker
-I need Prometheus and the only installation available is as a Docker image.
-The workaround is to use my Windows laptop where Docker Desktop works. 
+3. Metrics service
+- Use Prometheus because kirby uses it
+- Cannot use the prebuilt prom/Prometheus Docker image because I cannot find a Docker Desktop version which works on MacOS Ventura 13.6.1
+- The alternative is to download Prometheus binaries from https://prometheus.io/download/ (prometheus 2.48 Darwin for Mac OS)
+- Configure prometheus.yml to listen/scrape the "lag" metrics
+- run via ./prometheus --config.file=prometheus.yml (then go localhost:9090)
+
+4. Kubernetes
+- Install kube
+- Deploy a service
+- Enable metrics server
+- Create a HPA (min/max limit for scaling, target deployment, metrics
+- (Optional) try this sample autoscale based on CPU metrics = https://medium.com/@arton.demaku/horizontal-auto-scaling-in-kubernetes-fc0809d6668
+
+5. Final integration
+- Configure Prometheus as the metrics server in Kubernetes
+- Configure HPA to the "lag" metric
+- Deploy Kafka/Zookeeper, Prometheus, Producer, and Consumer in Kubernetes
+- Test end-to-end

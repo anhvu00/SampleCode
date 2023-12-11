@@ -1,0 +1,31 @@
+Before, consumer is a standalone springboot app which causes some issues:
+1. mvn install hangs, waiting for reading an empty kafka queue. it never reaches completion,
+even after reading everything from the topic.
+2. there is no tomcat to serve on localhost:80xx where prometheus supposes to scrape for "kafka_lag" metrics/value.
+
+To solve the above issues, I convert this app to a REST service on 8088:
+1. localhost:8088/kafka/initialize will initialize the consumer service
+2. localhost:8088/kafka/start will start consuming events/messages from 'anh-topic'
+
+As it consumes messages for 3 minutes:
+1. It writes to console/terminal the message
+2. It calculates the 'kafka_lag' and expose it to prometheus to scrape.
+
+You need to run the producer to be able to see the output of (/kafka/initialize and start).
+You need to run prometheus (./prometheus --config.file=anh-test-scale-prometheus.yml)
+to see the 'kafka_lag' (http://localhost:9090/graph?g0.expr=kafka_lag&g0.tab=0&g0.stacked=0&g0.range_input=1m)
+
+Issues:
+1. Prometheus only sees 1 value of the "kafka_lag".
+2. Setting Prometheus scrape frequency (every second) + add a timestamp on kafka_lag
+would show multiple kafka_lags but they don't update values either.
+
+Test urls:
+http://localhost:9090/targets
+http://localhost:8088/actuator/prometheus
+http://localhost:9090/graph?g0.expr=kafka_lag&g0.tab=0&g0.stacked=0&g0.range_input=1m
+
+TODO:
+1. How to make Prometheus see the kafka_lag updated values?
+2. Why is the lag always -1 when polling 1 at a time?
+3. How HPA works (listening to a metrics)?
