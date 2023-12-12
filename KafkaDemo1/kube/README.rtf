@@ -1,0 +1,32 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2709
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Install minikube (https://minikube.sigs.k8s.io/docs/start/)\
+It requires Docker (https://docs.docker.com/engine/install/)\
+- Mac OS Ventura = needs older Docker Desktop v4.9 (download here)\
+- Run Docker Desktop, Settings, Enable Kubernetes (important).\
+If failed, check and clean up disk space.\
+- kubectl version \
+[If client/server are different version and you want to sync them\
+Ex. Client v1.28, Server (in Docker?) v1.24\
+https://github.com/kubernetes/kubernetes/releases/tag/v1.24.0 \
+However, it might not be necessary because kubectl runs ok.]\
+\
+- Create a docker image for your app (ex. docker build -t your-registry/your-app:java17 .)\
+- Create a deployment/service yaml file(s) for your app(s) and deploy to your local cluster\
+This is necessary because the HPA.yaml will refer to this deployment (not pod, not app name)\
+- Create and apply the HPA.yaml which has the min/max replicas setting\
+(Ex. kubectl apply -f hpa.yaml)\
+\
+TODO:\
+- kubectl commands deployed but I can\'92t access the app endpoint http://xxxx.\
+However, if I run the image inside Docker Desktop, then I can. Why? is my yaml bad? Need to check the docker deployment script if avail.\
+- HPA can listen to cpu metrics but we want our metrics. Since Kafka-lag metrics is not working right yet,\
+I need to artificially create a \'93fake-counter\'94 to trigger autoscaling in HPA.\
+\
+\
+}
