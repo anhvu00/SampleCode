@@ -2,6 +2,8 @@ package com.kyron.sample.kafkaConsumer;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Gauge;
 import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -21,6 +23,8 @@ public class KafkaConsumerService {
     MeterRegistry meterRegistry;
 
     private Consumer<String, String> kafkaConsumer;
+
+    private double fakeGaugeValue = 0.0;
 
     public void initializeKafkaConsumer() {
         Properties properties = new Properties();
@@ -78,8 +82,29 @@ public class KafkaConsumerService {
             // why prometheus doesn't show updated values for the following?
             meterRegistry.gauge("kafka_lag_single", Tags.of("topic", record.topic(), "partition", String.valueOf(record.partition())), lag);
         });
-
     }
+
+    // this only increase. if amount is negative, it doesn't do anything.
+    // see http://localhost:8088/actuator/prometheus fake_count_total value
+    public void increaseFakeCount(int amount) {
+        Counter fakeCounter = meterRegistry.counter("fake.count", Tags.empty());
+        fakeCounter.increment(amount);
+        double updatedValue = fakeCounter.count();
+        System.out.println("Fake count incremented by " + amount + ". Updated value: " + updatedValue);
+    }
+
+    // see if we can fake a number up and down using gauge
+    // this works. see http://localhost:8088/actuator/prometheus fake_gauge value
+    public void updateFakeGauge(int amount) {
+        Gauge.builder("fake.gauge", this, value -> value.fakeGaugeValue + amount)
+                .description("Fake Gauge")
+                .register(meterRegistry);
+
+        fakeGaugeValue += amount;
+        System.out.println("Fake gauge updated by " + amount + ". Updated value: " + fakeGaugeValue);
+    }
+
+
 
 }
 

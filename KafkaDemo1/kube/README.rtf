@@ -28,5 +28,10 @@ However, if I run the image inside Docker Desktop, then I can. Why? is my yaml b
 - HPA can listen to cpu metrics but we want our metrics. Since Kafka-lag metrics is not working right yet,\
 I need to artificially create a \'93fake-counter\'94 to trigger autoscaling in HPA.\
 \
+Added a fake.count but prometheus shows it as fake_count_total\
+This number is increment only, even when you give it a negative number = do nothing.\
+Added a fake.gauge which increases/decreases when the given number is positive/negative.\
 \
+TODO:\
+- Configure HPA to read this fake.gauge and autoscale = done\
 }
