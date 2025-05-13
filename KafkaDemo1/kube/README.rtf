@@ -1,7 +1,7 @@
 {\rtf1\ansi\ansicpg1252\cocoartf2709
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\csgray\c0;}
 \margl1440\margr1440\vieww11520\viewh8400\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
@@ -34,4 +34,50 @@ Added a fake.gauge which increases/decreases when the given number is positive/n
 \
 TODO:\
 - Configure HPA to read this fake.gauge and autoscale = done\
+\
+=====================\
+? Do I need Docker at all?\
+\
+- Test deploy with just Minikube\
+\
+=====================\
+Friday 12/15\
+? the log says my app runs but cannot access it from browser. Why?\
+Access app from outside cluster (hello, then kafka)\
+Might need to add kafka to cluster\
+Add HPA\
+Config HPA to use prometheus metric\
+\
+Issue: pod/deployment is not Ready/Running even when the log said so\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs22 \cf2 \CocoaLigature0   634  kk logs kafka-consumer-deployment-6cffb97465-n96mm -c kafka-consumer-container\
+  635  kubectl port-forward service/prometheus-service 9091:9090
+\f0\fs24 \cf0 \CocoaLigature1 \
+\
+=======================\
+Monday 12/18/23\
+\
+Need a Prometheus Adapter in the cluster\
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts\
+helm install prometheus-adapter prometheus-community/prometheus-adapter\
+\
+Need a ServiceMonitor in the cluster \
+apiVersion: monitoring.coreos.com/v1\
+kind: ServiceMonitor\
+metadata:\
+  name: your-app-monitor\
+spec:\
+  selector:\
+    matchLabels:\
+      app: kafka-consumer  # Match the labels of your application\
+  endpoints:\
+  - interval: 15s\
+    port: 8088  # Port where your application exposes metrics\
+    path: /actuator/prometheus  # The path to your Prometheus metrics endpoint\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
 }
