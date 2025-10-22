@@ -1,0 +1,97 @@
+<table style="width: 100%; border-collapse: collapse;">
+  <thead>
+    <tr style="background-color: #f2f2f2;">
+      <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">PII Type</th>
+      <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Detection Method</th>
+      <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Validation</th>
+      <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">Test Status</th>
+      <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>Email</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Regex</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Format validation</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Detects standard email formats</td>
+    </tr>
+    <tr style="background-color: #f9f9f9;">
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>SSN</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Regex</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Area/Group/Serial validation</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Rejects invalid area codes (000, 666, 900+), group 00, serial 0000</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>Phone Number</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Regex</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Format validation</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Supports multiple US formats: (555) 123-4567, 555-123-4567, etc.</td>
+    </tr>
+    <tr style="background-color: #f9f9f9;">
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>Credit Card</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Regex</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Luhn algorithm</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Supports 13-19 digits (Visa, Mastercard, Amex, Discover)</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>Person Names</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Stanford NER</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">-</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Best with full names; single first names may not be detected</td>
+    </tr>
+    <tr style="background-color: #f9f9f9;">
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>Locations</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Stanford NER</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">-</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Detects cities, states, countries, addresses</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>Organizations</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Stanford NER</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">-</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Detects company names, institutions</td>
+    </tr>
+    <tr style="background-color: #f9f9f9;">
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>Dates</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Stanford NER</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">-</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Various date formats; excludes SSN-like patterns</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>Money</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Stanford NER</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">-</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Detects currency amounts ($100, €50, etc.)</td>
+    </tr>
+    <tr style="background-color: #f9f9f9;">
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>IP Address (IPv4)</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Regex</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Format validation</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">IPv4 only; IPv6 not supported</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>ZIP Code</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Regex</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Format validation</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">5-digit and ZIP+4 formats</td>
+    </tr>
+    <tr style="background-color: #f9f9f9;">
+      <td style="border: 1px solid #ddd; padding: 8px;"><strong>URL</strong></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Regex</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">Format validation</td>
+      <td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: #d4edda;">✅ Working</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">HTTP/HTTPS URLs</td>
+    </tr>
+  </tbody>
+</table>
