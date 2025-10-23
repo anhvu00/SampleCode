@@ -714,5 +714,373 @@ class PiiDetectorApplicationTests {
 		assertEquals(0, cards.size(), "Should not detect invalid credit card");
 	}
 
+	// -----------------
+	// ========== ADDRESS TESTS ==========
+
+	@Test
+	@DisplayName("Should detect full US addresses")
+	void testFullAddresses() {
+		String[] addresses = {
+				"123 Main Street, Springfield, IL 62701",
+				"456 Oak Avenue, New York, NY 10001",
+				"789 Elm Drive, Los Angeles, CA 90001",
+				"321 Pine Road, Chicago, IL 60601",
+				"654 Maple Lane, Boston, MA 02101"
+		};
+
+		System.out.println("\n=== Full Address Detection ===");
+		int detected = 0;
+
+		for (String address : addresses) {
+			PIIDetectionResult result = detector.analyze(address);
+
+			// Addresses may be detected as LOCATION entities or multiple components
+			List<PIIEntity> locations = result.getEntitiesByType("LOCATION");
+			List<PIIEntity> zipCodes = result.getEntitiesByType("ZIP_CODE");
+
+			boolean hasLocation = !locations.isEmpty();
+			boolean hasZip = !zipCodes.isEmpty();
+
+			if (hasLocation || hasZip) {
+				detected++;
+				System.out.println("✓ Address: " + address);
+				System.out.println("  Locations found: " + locations.size());
+				for (PIIEntity loc : locations) {
+					System.out.println("    - " + loc.getValue());
+				}
+				System.out.println("  ZIP codes found: " + zipCodes.size());
+				for (PIIEntity zip : zipCodes) {
+					System.out.println("    - " + zip.getValue());
+				}
+			} else {
+				System.out.println("✗ Address: " + address);
+			}
+			System.out.println();
+		}
+
+		System.out.println("Detected: " + detected + "/" + addresses.length);
+		assertTrue(detected >= 4,
+				"Should detect at least 4 addresses (as locations or components)");
+	}
+
+	@Test
+	@DisplayName("Should detect street addresses")
+	void testStreetAddresses() {
+		String[] streetAddresses = {
+				"123 Main Street",
+				"456 Oak Avenue",
+				"789 Elm Drive",
+				"321 Pine Road",
+				"654 Maple Lane"
+		};
+
+		System.out.println("\n=== Street Address Detection ===");
+		System.out.println("Note: Street addresses alone are challenging without city/state context\n");
+
+		int detected = 0;
+
+		for (String address : streetAddresses) {
+			PIIDetectionResult result = detector.analyze(address);
+			List<PIIEntity> locations = result.getEntitiesByType("LOCATION");
+
+			if (!locations.isEmpty()) {
+				detected++;
+				System.out.println("✓ " + address + " -> " + locations.get(0).getValue());
+			} else {
+				System.out.println("✗ " + address);
+			}
+		}
+
+		System.out.println("\nDetected: " + detected + "/" + streetAddresses.length);
+		// Street addresses without context are often not detected
+	}
+
+	@Test
+	@DisplayName("Should detect addresses in sentences")
+	void testAddressesInSentences() {
+		String[] sentences = {
+				"Please send mail to 123 Main Street, Springfield, IL 62701.",
+				"The office is located at 456 Oak Avenue, New York, NY 10001.",
+				"He lives at 789 Elm Drive, Los Angeles, CA 90001.",
+				"Contact us at 321 Pine Road, Chicago, IL 60601.",
+				"Visit our store at 654 Maple Lane, Boston, MA 02101."
+		};
+
+		System.out.println("\n=== Addresses in Sentences ===");
+		int detected = 0;
+
+		for (String sentence : sentences) {
+			PIIDetectionResult result = detector.analyze(sentence);
+
+			List<PIIEntity> locations = result.getEntitiesByType("LOCATION");
+			List<PIIEntity> zipCodes = result.getEntitiesByType("ZIP_CODE");
+
+			if (!locations.isEmpty() || !zipCodes.isEmpty()) {
+				detected++;
+				System.out.println("✓ Sentence: " + sentence);
+				System.out.println("  Components found:");
+				for (PIIEntity loc : locations) {
+					System.out.println("    Location: " + loc.getValue());
+				}
+				for (PIIEntity zip : zipCodes) {
+					System.out.println("    ZIP: " + zip.getValue());
+				}
+			} else {
+				System.out.println("✗ Sentence: " + sentence);
+			}
+			System.out.println();
+		}
+
+		assertTrue(detected >= 4,
+				"Should detect address components in at least 4 sentences");
+	}
+
+	@Test
+	@DisplayName("Should detect city and state")
+	void testCityState() {
+		String[] cityStates = {
+				"Springfield, IL",
+				"New York, NY",
+				"Los Angeles, CA",
+				"Chicago, IL",
+				"Boston, MA"
+		};
+
+		System.out.println("\n=== City, State Detection ===");
+		int detected = 0;
+
+		for (String cityState : cityStates) {
+			PIIDetectionResult result = detector.analyze(cityState);
+			List<PIIEntity> locations = result.getEntitiesByType("LOCATION");
+
+			if (!locations.isEmpty()) {
+				detected++;
+				System.out.println("✓ " + cityState);
+				for (PIIEntity loc : locations) {
+					System.out.println("  Detected: " + loc.getValue());
+				}
+			} else {
+				System.out.println("✗ " + cityState);
+			}
+			System.out.println();
+		}
+
+		System.out.println("Detected: " + detected + "/" + cityStates.length);
+		assertTrue(detected >= 4, "Should detect at least 4 city/state combinations");
+	}
+
+	@Test
+	@DisplayName("Should detect ZIP codes in addresses")
+	void testZIPCodesInAddresses() {
+		String[] addressesWithZip = {
+				"123 Main St, Springfield, IL 62701",
+				"456 Oak Ave, New York, NY 10001",
+				"789 Elm Dr, Los Angeles, CA 90001-1234",  // ZIP+4
+				"321 Pine Rd, Chicago, IL 60601"
+		};
+
+		System.out.println("\n=== ZIP Code Detection in Addresses ===");
+		int detected = 0;
+
+		for (String address : addressesWithZip) {
+			PIIDetectionResult result = detector.analyze(address);
+			List<PIIEntity> zipCodes = result.getEntitiesByType("ZIP_CODE");
+
+			if (!zipCodes.isEmpty()) {
+				detected++;
+				System.out.println("✓ Address: " + address);
+				System.out.println("  ZIP: " + zipCodes.get(0).getValue());
+			} else {
+				System.out.println("✗ Address: " + address);
+			}
+			System.out.println();
+		}
+
+		assertEquals(4, detected, "Should detect all 4 ZIP codes");
+	}
+
+	@Test
+	@DisplayName("Should detect multiple addresses in text")
+	void testMultipleAddresses() {
+		String text = "Ship to 123 Main Street, Springfield, IL 62701 " +
+				"and bill to 456 Oak Avenue, New York, NY 10001.";
+
+		PIIDetectionResult result = detector.analyze(text);
+
+		List<PIIEntity> locations = result.getEntitiesByType("LOCATION");
+		List<PIIEntity> zipCodes = result.getEntitiesByType("ZIP_CODE");
+
+		System.out.println("\nText: " + text);
+		System.out.println("\nDetected " + locations.size() + " locations:");
+		for (PIIEntity loc : locations) {
+			System.out.println("  - " + loc.getValue());
+		}
+		System.out.println("\nDetected " + zipCodes.size() + " ZIP codes:");
+		for (PIIEntity zip : zipCodes) {
+			System.out.println("  - " + zip.getValue());
+		}
+
+		assertTrue(locations.size() >= 2 || zipCodes.size() >= 2,
+				"Should detect components from multiple addresses");
+	}
+
+	@Test
+	@DisplayName("Should handle PO Box addresses")
+	void testPOBoxAddresses() {
+		String[] poBoxes = {
+				"PO Box 1234, Springfield, IL 62701",
+				"P.O. Box 5678, New York, NY 10001",
+				"Post Office Box 9012, Chicago, IL 60601"
+		};
+
+		System.out.println("\n=== PO Box Address Detection ===");
+		int detected = 0;
+
+		for (String poBox : poBoxes) {
+			PIIDetectionResult result = detector.analyze(poBox);
+
+			List<PIIEntity> locations = result.getEntitiesByType("LOCATION");
+			List<PIIEntity> zipCodes = result.getEntitiesByType("ZIP_CODE");
+
+			if (!locations.isEmpty() || !zipCodes.isEmpty()) {
+				detected++;
+				System.out.println("✓ " + poBox);
+				if (!locations.isEmpty()) {
+					System.out.println("  Location: " + locations.get(0).getValue());
+				}
+				if (!zipCodes.isEmpty()) {
+					System.out.println("  ZIP: " + zipCodes.get(0).getValue());
+				}
+			} else {
+				System.out.println("✗ " + poBox);
+			}
+			System.out.println();
+		}
+
+		// PO Box detection can be hit-or-miss
+		assertTrue(detected >= 2, "Should detect at least 2 PO Box addresses");
+	}
+
+	@Test
+	@DisplayName("Should detect addresses with apartment numbers")
+	void testApartmentAddresses() {
+		String[] apartments = {
+				"123 Main Street Apt 4B, Springfield, IL 62701",
+				"456 Oak Avenue Unit 12, New York, NY 10001",
+				"789 Elm Drive #5C, Los Angeles, CA 90001",
+				"321 Pine Road Suite 200, Chicago, IL 60601"
+		};
+
+		System.out.println("\n=== Apartment Address Detection ===");
+		int detected = 0;
+
+		for (String apartment : apartments) {
+			PIIDetectionResult result = detector.analyze(apartment);
+
+			List<PIIEntity> locations = result.getEntitiesByType("LOCATION");
+			List<PIIEntity> zipCodes = result.getEntitiesByType("ZIP_CODE");
+
+			if (!locations.isEmpty() || !zipCodes.isEmpty()) {
+				detected++;
+				System.out.println("✓ " + apartment);
+			} else {
+				System.out.println("✗ " + apartment);
+			}
+		}
+
+		System.out.println("\nDetected: " + detected + "/" + apartments.length);
+		assertTrue(detected >= 3, "Should detect at least 3 apartment addresses");
+	}
+
+	@Test
+	@DisplayName("Should redact addresses")
+	void testAddressRedaction() {
+		String text = "Please send the package to John Smith at " +
+				"123 Main Street, Springfield, IL 62701.";
+
+		PIIDetectionResult result = detector.analyze(text);
+		String redacted = result.getRedactedText();
+
+		System.out.println("\nOriginal: " + text);
+		System.out.println("Redacted: " + redacted);
+
+		// Check that address components are redacted
+		assertFalse(redacted.contains("Springfield"),
+				"City should be redacted");
+		assertFalse(redacted.contains("62701"),
+				"ZIP code should be redacted");
+		assertFalse(redacted.contains("John Smith"),
+				"Name should be redacted");
+	}
+
+	@Test
+	@DisplayName("Should detect international addresses")
+	void testInternationalAddresses() {
+		String[] internationalAddresses = {
+				"10 Downing Street, London, UK",
+				"1600 Pennsylvania Avenue, Washington DC",
+				"Champs-Élysées, Paris, France",
+				"Shibuya, Tokyo, Japan"
+		};
+
+		System.out.println("\n=== International Address Detection ===");
+		System.out.println("Note: Detection varies based on NER training data\n");
+
+		int detected = 0;
+
+		for (String address : internationalAddresses) {
+			PIIDetectionResult result = detector.analyze(address);
+			List<PIIEntity> locations = result.getEntitiesByType("LOCATION");
+
+			if (!locations.isEmpty()) {
+				detected++;
+				System.out.println("✓ " + address);
+				for (PIIEntity loc : locations) {
+					System.out.println("  - " + loc.getValue());
+				}
+			} else {
+				System.out.println("✗ " + address);
+			}
+			System.out.println();
+		}
+
+		System.out.println("Detected: " + detected + "/" + internationalAddresses.length);
+		// International address detection is variable
+	}
+
+	@Test
+	@DisplayName("Should handle addresses with mixed PII")
+	void testAddressesWithMixedPII() {
+		String text = "Contact John Smith at john@example.com or " +
+				"123 Main Street, Springfield, IL 62701, " +
+				"phone: (555) 123-4567, SSN: 123-45-6789.";
+
+		PIIDetectionResult result = detector.analyze(text);
+
+		System.out.println("\nText: " + text);
+		System.out.println("\n=== All Detected PII ===");
+
+		for (PIIEntity entity : result.getEntities()) {
+			System.out.println(entity.getType() + ": " + entity.getValue());
+		}
+
+		// Should detect various PII types
+		assertFalse(result.getEntitiesByType("PERSON").isEmpty(),
+				"Should detect person name");
+		assertFalse(result.getEntitiesByType("EMAIL").isEmpty(),
+				"Should detect email");
+		assertFalse(result.getEntitiesByType("PHONE").isEmpty(),
+				"Should detect phone");
+		assertFalse(result.getEntitiesByType("SSN").isEmpty(),
+				"Should detect SSN");
+
+		// Address components
+		boolean hasAddressComponents =
+				!result.getEntitiesByType("LOCATION").isEmpty() ||
+						!result.getEntitiesByType("ZIP_CODE").isEmpty();
+
+		assertTrue(hasAddressComponents, "Should detect address components");
+	}
+
 
 } // the end

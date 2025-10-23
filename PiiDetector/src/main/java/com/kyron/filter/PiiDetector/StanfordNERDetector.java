@@ -19,7 +19,7 @@ public class StanfordNERDetector {
         props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner");
 
         // DISABLE SUTime - causes loading issues
-        props.setProperty("ner.useSUTime", "false");  // ← Changed from "true" to "false"
+        props.setProperty("ner.useSUTime", "false");  // disable SUTime
         props.setProperty("ner.applyFineGrained", "false");
 
         // Suppress some warnings
