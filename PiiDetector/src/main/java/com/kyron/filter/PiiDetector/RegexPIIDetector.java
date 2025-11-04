@@ -45,8 +45,8 @@ public class RegexPIIDetector {
                 "\\b\\d{5}(?:-\\d{4})?\\b"
         ));
 
-        // Date of Birth (various formats)
-        PATTERNS.put("DATE_OF_BIRTH", Pattern.compile(
+        // Date detection (MM/DD/YYYY or YYYY/MM/DD)
+        PATTERNS.put("CALENDAR_DATE", Pattern.compile(
                 "\\b(?:0?[1-9]|1[0-2])[/-](?:0?[1-9]|[12][0-9]|3[01])[/-](?:19|20)\\d{2}\\b|" +
                         "\\b(?:19|20)\\d{2}[/-](?:0?[1-9]|1[0-2])[/-](?:0?[1-9]|[12][0-9]|3[01])\\b"
         ));
